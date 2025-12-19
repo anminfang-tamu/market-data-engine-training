@@ -1,275 +1,231 @@
-FIX Engine Rebuild (Core C++ / Linux Training Project)
-Objective
+# FIX Engine Rebuild (Core C++ / Linux Training Project)
 
-In a Linux (AWS EC2) environment, hand-build a long-running, observable, stress-testable, and postmortem-driven
-Market Data Processing Engine, in order to systematically strengthen:
+## Objective
 
-C++ engineering skills (memory management, object lifetime, concurrency)
+In a Linux (AWS EC2) environment, hand-build a long-running, observable,
+stress-testable, and postmortem-driven market data processing engine, in order
+to systematically strengthen:
 
-Linux runtime understanding (CPU, memory, syscalls)
+- C++ engineering skills (memory management, object lifetime, concurrency)
+- Linux runtime understanding (CPU, memory, syscalls)
+- Performance analysis and incident postmortem skills
 
-Performance analysis and incident postmortem skills
+This is not a demo project, but a production-environment simulation training
+ground.
 
-This is not a demo project, but a production-environment simulation training ground.
+## 1. Environment & Constraints
 
-1. Environment & Constraints
-   1.1 Runtime Environment
+### 1.1 Runtime Environment
 
-Platform: AWS EC2
+- Platform: AWS EC2
+- OS: Ubuntu 22.04 LTS (or Amazon Linux 2023)
+- Instance: c6i.large / c7i.large
+- Tooling:
+  - gdb
+  - perf
+  - strace
+  - pmap
+  - pidstat
+  - htop
+  - Sanitizers (asan, ubsan)
 
-OS: Ubuntu 22.04 LTS (or Amazon Linux 2023)
+### 1.2 Mandatory Principles
 
-Instance: c6i.large / c7i.large
+- All code must run on Linux.
+- The engine is a long-running process.
+- Every stress test must produce reproducible evidence.
+- Do not aim to fully implement FIX - prioritize data flow and engineering
+  fundamentals.
 
-Tooling:
+## 2. System Architecture (Single-Machine Phase)
 
-gdb
+```
++---------------------+       +----------------------+
+|   feed_generator    | ----> |     market_engine     |
+|  (external process) |  TCP  |   (long-running)      |
++---------------------+       +----------------------+
+```
 
-perf
+- Initial phase: same EC2 instance, separate processes.
+- Later phase (after maturity): split across two machines to validate real
+  network jitter.
 
-strace
+## 3. feed_generator (Market Data Simulator)
 
-pmap
+### 3.1 Responsibilities
 
-pidstat
+- Continuously send market data to the engine.
+- Deterministically generate load, anomalies, and failures.
 
-htop
+### 3.2 Message Format (Binary, Simplified)
 
-Sanitizers (asan, ubsan)
-
-1.2 Mandatory Principles
-
-All code must run on Linux
-
-The engine is a long-running process
-
-Every stress test must produce reproducible evidence
-
-Do not aim to fully implement FIX — prioritize data flow and engineering fundamentals
-
-2. System Architecture (Single-Machine Phase)
-   +---------------------+ +----------------------+
-   | feed_generator | -----> | market_engine |
-   | (external process) | TCP | (long-running) |
-   +---------------------+ +----------------------+
-
-Initial phase: same EC2 instance, separate processes
-
-Later phase (after maturity): split across two machines to validate real network jitter
-
-3. feed_generator (Market Data Simulator)
-   3.1 Responsibilities
-
-Continuously send market data to the engine
-
-Deterministically generate load, anomalies, and failures
-
-3.2 Message Format (Binary, Simplified)
+```cpp
 struct MarketDataMsg {
-uint32_t symbol_id;
-int64_t exchange_ts;
-int64_t bid_price;
-int64_t ask_price;
-uint32_t bid_size;
-uint32_t ask_size;
+  uint32_t symbol_id;
+  int64_t exchange_ts;
+  int64_t bid_price;
+  int64_t ask_price;
+  uint32_t bid_size;
+  uint32_t ask_size;
 };
+```
 
-Fixed size
+- Fixed size.
+- Network byte order.
+- No FIX protocol complexity.
 
-Network byte order
+### 3.3 Configurable Parameters (Command Line)
 
-No FIX protocol complexity
+- `--rate` - message rate (msg/sec)
+- `--burst-rate` - burst throughput
+- `--burst-duration`
+- `--drop-ratio` - packet loss ratio
+- `--dup-ratio` - duplicate ratio
+- `--disorder-ratio` - out-of-order ratio
+- `--symbol-count`
+- `--seed` - random seed (must be reproducible)
 
-3.3 Configurable Parameters (Command Line)
+## 4. market_engine (Core Training Target)
 
---rate – message rate (msg/sec)
+### 4.1 Processing Pipeline (Mandatory Segmentation)
 
---burst-rate – burst throughput
-
---burst-duration
-
---drop-ratio – packet loss ratio
-
---dup-ratio – duplicate ratio
-
---disorder-ratio – out-of-order ratio
-
---symbol-count
-
---seed – random seed (must be reproducible)
-
-4. market_engine (Core Training Target)
-   4.1 Processing Pipeline (Mandatory Segmentation)
-   [ socket recv ]
-   |
-   v
-   [ ingest / parse ]
-   |
-   v
-   [ normalize ]
-   |
-   v
-   [ process (strategy mock) ]
-   |
-   v
-   [ act (order mock / logging) ]
+```
+[ socket recv ]
+      |
+      v
+[ ingest / parse ]
+      |
+      v
+[ normalize ]
+      |
+      v
+[ process (strategy mock) ]
+      |
+      v
+[ act (order mock / logging) ]
+```
 
 Each stage must have independent timing and metrics.
 
-4.2 Threading Model (Initial Recommendation)
+### 4.2 Threading Model (Initial Recommendation)
 
-Thread 1: network ingest
-
-Thread 2: processing / strategy
-
-Thread 3: logging / output (optional)
+- Thread 1: network ingest
+- Thread 2: processing / strategy
+- Thread 3: logging / output (optional)
 
 Communication:
 
-Bounded queues
+- Bounded queues
+- Explicit backpressure strategy
 
-Explicit backpressure strategy
+### 4.3 Mandatory Metrics (Real-Time)
 
-4.3 Mandatory Metrics (Real-Time)
+- Throughput (msg/sec)
+- Latency histogram: p50 / p95 / p99
+- Queue depth
+- Drop count
+- Backpressure trigger count
+- RSS / heap size (periodic sampling)
 
-Throughput (msg/sec)
+## 5. Linux Observability (Mandatory)
 
-Latency histogram: p50 / p95 / p99
+### 5.1 Evidence Required for Every Stress Test
 
-Queue depth
+- `pidstat -p <pid> 1`
+- `pmap -x <pid>`
+- `perf stat -p <pid>`
+- `perf record` + `perf report`
+- `strace -p <pid> -c`
+- Engine-reported metrics
 
-Drop count
+No evidence = the test is invalid.
 
-Backpressure trigger count
+## 6. Stress Testing & Incident Injection
 
-RSS / heap size (periodic sampling)
+### 6.1 Required Stress Scenarios
 
-5. Linux Observability (Mandatory)
-   5.1 Evidence Required for Every Stress Test
+- High-rate bursts (10x-100x)
+- Out-of-order messages
+- Duplicate messages
+- Packet loss (1% / 5% / 20%)
+- Slow consumers (intentional sleep / blocking)
+- IO jitter (slow logging)
 
-pidstat -p <pid> 1
+### 6.2 Required Failure Types
 
-pmap -x <pid>
+- Unbounded memory growth
+- p99 latency explosion
+- Silent data corruption
+- Backpressure design failure
+- Performance degradation after long-running execution
 
-perf stat -p <pid>
+## 7. Postmortem Template
 
-perf record + perf report
+### Incident Summary
 
-strace -p <pid> -c
+- What happened:
+- When detected:
+- Impact:
 
-Engine-reported metrics
+### Evidence
 
-No evidence = the test is invalid
+- Metrics snapshot:
+- perf / strace / pmap evidence:
 
-6. Stress Testing & Incident Injection
-   6.1 Required Stress Scenarios
+### Root Cause
 
-High-rate bursts (10×–100×)
+- Immediate cause:
+- Deeper design flaw:
 
-Out-of-order messages
+### Fix
 
-Duplicate messages
+- Code changes:
+- Why this prevents recurrence:
 
-Packet loss (1% / 5% / 20%)
+### Follow-up
 
-Slow consumers (intentional sleep / blocking)
+- Additional monitoring:
+- Tests added:
 
-IO jitter (slow logging)
+## 8. Four-Week Validation Milestones
 
-6.2 Required Failure Types
+### Week 1
 
-Unbounded memory growth
+- Engine runs for 30 minutes with no memory growth.
+- Metrics output functioning.
 
-p99 latency explosion
+### Week 2
 
-Silent data corruption
+- Complete one burst stress test.
+- Optimize one real hotspot using perf (before/after comparison required).
 
-Backpressure design failure
+### Week 3
 
-Performance degradation after long-running execution
+- Intentionally trigger an incident.
+- Produce a complete postmortem.
 
-7. Postmortem Template
-   Incident Summary
+### Week 4
 
-What happened:
+- Backpressure strategy clearly defined.
+- Stable 24-hour soak test.
 
-When detected:
+## 9. Design Philosophy (For Future Reference)
 
-Impact:
+- Correctness > elegant architecture
+- Observability > raw throughput numbers
+- Reproducible failures > "rare issues"
+- Explicit trade-offs > perfection fantasy
 
-Evidence
-
-Metrics snapshot:
-
-perf / strace / pmap evidence:
-
-Root Cause
-
-Immediate cause:
-
-Deeper design flaw:
-
-Fix
-
-Code changes:
-
-Why this prevents recurrence:
-
-Follow-up
-
-Additional monitoring:
-
-Tests added:
-
-8. Four-Week Validation Milestones
-   Week 1
-
-Engine runs for 30 minutes with no memory growth
-
-Metrics output functioning
-
-Week 2
-
-Complete one burst stress test
-
-Optimize one real hotspot using perf (before/after comparison required)
-
-Week 3
-
-Intentionally trigger an incident
-
-Produce a complete postmortem
-
-Week 4
-
-Backpressure strategy clearly defined
-
-Stable 24-hour soak test
-
-9. Design Philosophy (For Future Reference)
-
-Correctness > elegant architecture
-
-Observability > raw throughput numbers
-
-Reproducible failures > “rare issues”
-
-Explicit trade-offs > perfection fantasy
-
-10. When to Introduce FIX / Multi-Host Deployment
+## 10. When to Introduce FIX / Multi-Host Deployment
 
 Only allowed when:
 
-Single-machine runs stably for 24 hours
-
-p99 latency is explainable
-
-No unbounded memory growth
-
-Every incident is reproducible and postmortem-ready
+- Single-machine runs stably for 24 hours
+- p99 latency is explainable
+- No unbounded memory growth
+- Every incident is reproducible and postmortem-ready
 
 Then (and only then):
 
-Introduce FIX session layer
-
-Split generator and engine across two EC2 instances
+- Introduce FIX session layer
+- Split generator and engine across two EC2 instances
