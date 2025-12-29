@@ -7,14 +7,14 @@
 
 namespace protocol
 {
-    constexpr std::size_t kWireSize = 40;
+    constexpr std::size_t kWireSize = 36;
 
 // make sure match hardware arch
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     inline uint32_t host_to_be32(uint32_t v) { return __builtin_bswap32(v); }
     inline uint64_t host_to_be64(uint64_t v) { return __builtin_bswap64(v); }
     inline uint32_t be32_to_host(uint32_t v) { return __builtin_bswap32(v); }
-    inline uint32_t be64_to_host(uint64_t v) { return __builtin_bswap64(v); }
+    inline uint64_t be64_to_host(uint64_t v) { return static_cast<uint64_t>(__builtin_bswap64(v)); }
 #else
     inline uint32_t host_to_be32(uint32_t v) { return v; }
     inline uint64_t host_to_be64(uint64_t v) { return v; }
