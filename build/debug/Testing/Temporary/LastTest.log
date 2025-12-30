@@ -1,0 +1,219 @@
+Start testing: Dec 29 21:11 CST
+----------------------------------------------------------
+1/8 Testing: Protocol.RoundTrip
+1/8 Test: Protocol.RoundTrip
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTrip" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTrip" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTrip
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTrip
+[       OK ] Protocol.RoundTrip (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTrip" end time: Dec 29 21:11 CST
+"Protocol.RoundTrip" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/8 Testing: Protocol.RoundTripWithMsgZero
+2/8 Test: Protocol.RoundTripWithMsgZero
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgZero" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgZero" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgZero
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgZero
+[       OK ] Protocol.RoundTripWithMsgZero (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgZero" end time: Dec 29 21:11 CST
+"Protocol.RoundTripWithMsgZero" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/8 Testing: Protocol.RoundTripWithMsgMax
+3/8 Test: Protocol.RoundTripWithMsgMax
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMax" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgMax" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgMax
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgMax
+[       OK ] Protocol.RoundTripWithMsgMax (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgMax" end time: Dec 29 21:11 CST
+"Protocol.RoundTripWithMsgMax" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/8 Testing: Protocol.RoundTripWithMsgMin
+4/8 Test: Protocol.RoundTripWithMsgMin
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMin" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgMin" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgMin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgMin
+[       OK ] Protocol.RoundTripWithMsgMin (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgMin" end time: Dec 29 21:11 CST
+"Protocol.RoundTripWithMsgMin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/8 Testing: Protocol.RoundTripWithMsgNegative
+5/8 Test: Protocol.RoundTripWithMsgNegative
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgNegative" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgNegative" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgNegative
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgNegative
+[       OK ] Protocol.RoundTripWithMsgNegative (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgNegative" end time: Dec 29 21:11 CST
+"Protocol.RoundTripWithMsgNegative" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/8 Testing: Protocol.RoundTripWithTwiceDuplicateMsg
+6/8 Test: Protocol.RoundTripWithTwiceDuplicateMsg
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithTwiceDuplicateMsg" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithTwiceDuplicateMsg" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithTwiceDuplicateMsg
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithTwiceDuplicateMsg
+[       OK ] Protocol.RoundTripWithTwiceDuplicateMsg (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithTwiceDuplicateMsg" end time: Dec 29 21:11 CST
+"Protocol.RoundTripWithTwiceDuplicateMsg" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/8 Testing: Protocol.ByteCorrupt
+7/8 Test: Protocol.ByteCorrupt
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.ByteCorrupt" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.ByteCorrupt" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.ByteCorrupt
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.ByteCorrupt
+[       OK ] Protocol.ByteCorrupt (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.ByteCorrupt" end time: Dec 29 21:11 CST
+"Protocol.ByteCorrupt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/8 Testing: Protocol.DecodeSizeNotMatch
+8/8 Test: Protocol.DecodeSizeNotMatch
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.DecodeSizeNotMatch" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.DecodeSizeNotMatch" start time: Dec 29 21:11 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.DecodeSizeNotMatch
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.DecodeSizeNotMatch
+[       OK ] Protocol.DecodeSizeNotMatch (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.DecodeSizeNotMatch" end time: Dec 29 21:11 CST
+"Protocol.DecodeSizeNotMatch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Dec 29 21:11 CST

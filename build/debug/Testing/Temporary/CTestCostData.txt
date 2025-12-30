@@ -1,0 +1,10 @@
+Protocol.RoundTrip 13 0.00177019
+Protocol.DecodeSize 1 0.0402565
+Protocol.DecodeSizeNotMatch 9 0.00141385
+Protocol.RoundTripWithMsgZero 8 0.00192029
+Protocol.RoundTripWithMsgMax 7 0.00299921
+Protocol.RoundTripWithMsgMin 6 0.00342326
+Protocol.RoundTripWithMsgNegative 5 0.00672584
+Protocol.RoundTripWithTwiceDuplicateMsg 3 0.00678579
+Protocol.ByteCorrupt 2 0.0118689
+---
