@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /Users/anminfang/Documents/md-engine-training/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	/opt/homebrew/Cellar/cmake/3.30.0/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -199,6 +209,30 @@ unit/test_protocol.cpp.s:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.s
 .PHONY : unit/test_protocol.cpp.s
 
+unit/test_tcp_server.o: unit/test_tcp_server.cpp.o
+.PHONY : unit/test_tcp_server.o
+
+# target to build an object file
+unit/test_tcp_server.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o
+.PHONY : unit/test_tcp_server.cpp.o
+
+unit/test_tcp_server.i: unit/test_tcp_server.cpp.i
+.PHONY : unit/test_tcp_server.i
+
+# target to preprocess a source file
+unit/test_tcp_server.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.i
+.PHONY : unit/test_tcp_server.cpp.i
+
+unit/test_tcp_server.s: unit/test_tcp_server.cpp.s
+.PHONY : unit/test_tcp_server.s
+
+# target to generate assembly for a file
+unit/test_tcp_server.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.s
+.PHONY : unit/test_tcp_server.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -211,10 +245,14 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
 	@echo "... protocol_tests"
 	@echo "... unit/test_protocol.o"
 	@echo "... unit/test_protocol.i"
 	@echo "... unit/test_protocol.s"
+	@echo "... unit/test_tcp_server.o"
+	@echo "... unit/test_tcp_server.i"
+	@echo "... unit/test_tcp_server.s"
 .PHONY : help
 
 

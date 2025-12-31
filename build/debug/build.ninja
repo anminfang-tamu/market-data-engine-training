@@ -429,12 +429,19 @@ build src/install/strip: phony src/CMakeFiles/install/strip.util
 #############################################
 # Order-only phony target for protocol_tests
 
-build cmake_object_order_depends_target_protocol_tests: phony || cmake_object_order_depends_target_gtest cmake_object_order_depends_target_gtest_main
+build cmake_object_order_depends_target_protocol_tests: phony || cmake_object_order_depends_target_common_lib cmake_object_order_depends_target_gtest cmake_object_order_depends_target_gtest_main
 
 build tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o: CXX_COMPILER__protocol_tests_unscanned_Debug /Users/anminfang/Documents/md-engine-training/tests/unit/test_protocol.cpp || cmake_object_order_depends_target_protocol_tests
   DEP_FILE = tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o.d
   FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
-  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src/protocol -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest
+  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src/protocol -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest
+  OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/protocol_tests.dir/unit
+
+build tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o: CXX_COMPILER__protocol_tests_unscanned_Debug /Users/anminfang/Documents/md-engine-training/tests/unit/test_tcp_server.cpp || cmake_object_order_depends_target_protocol_tests
+  DEP_FILE = tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o.d
+  FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
+  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src/protocol -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest
   OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/protocol_tests.dir/unit
 
@@ -446,10 +453,10 @@ build tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o: CXX_COMPILER
 #############################################
 # Link the executable tests/protocol_tests
 
-build tests/protocol_tests tests/protocol_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/protocol_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__protocol_tests_Debug tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o | lib/libgtest_main.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a
+build tests/protocol_tests tests/protocol_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/protocol_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__protocol_tests_Debug tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o | lib/libgtest_main.a src/libcommon_lib.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/libcommon_lib.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
   LINK_FLAGS = -L/usr/local/opt/openssl@1.1/lib
-  LINK_LIBRARIES = lib/libgtest_main.a  lib/libgtest.a
+  LINK_LIBRARIES = lib/libgtest_main.a  src/libcommon_lib.a  lib/libgtest.a
   OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
   POST_BUILD = cd /Users/anminfang/Documents/md-engine-training/build/debug/tests && /opt/homebrew/Cellar/cmake/3.30.0/bin/cmake -D TEST_TARGET=protocol_tests -D TEST_EXECUTABLE=/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/Users/anminfang/Documents/md-engine-training/build/debug/tests -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=protocol_tests_TESTS -D CTEST_FILE=/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /opt/homebrew/Cellar/cmake/3.30.0/share/cmake/Modules/GoogleTestAddTests.cmake
   PRE_LINK = :
