@@ -1,8 +1,11 @@
 #include <gtest/gtest.h>
 #include <array>
+#include <thread>
+#include <atomic>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <thread>
 
 #include "common/net/tcp_server_block.hpp"
 #include "common/net/tcp_client_block.hpp"
@@ -40,4 +43,51 @@ TEST(TcpClient, SendAllRecvLoop)
 
     close(fds[0]);
     close(fds[1]);
+}
+
+TEST(TcpClient, ConnectToServer)
+{
+    std::atomic<uint16_t> port{0};
+    std::atomic<int> server_fd{-1};
+    std::atomic<int> client_fd{-1};
+
+    std::thread server([&]
+                       {
+        int fd = socket(AF_INET, SOCK_STREAM, 0);
+        ASSERT_NE(fd, -1);
+
+        sockaddr_in addr{};
+        addr.sin_family = AF_INET;
+        addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+        addr.sin_port = htons(0);
+
+        ASSERT_EQ(bind(fd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)), 0);
+
+        socklen_t len = sizeof(addr);
+        ASSERT_EQ(getsockname(fd, reinterpret_cast<sockaddr*>(&addr), &len), 0);
+        port.store(ntohs(addr.sin_port), std::memory_order_release);
+
+        ASSERT_EQ(listen(fd, 1), 0);
+        server_fd.store(fd, std::memory_order_release);
+
+        int cfd = accept(fd, nullptr, nullptr);
+        if (cfd >= 0) {
+            client_fd.store(cfd, std::memory_order_release);
+            close(cfd);
+        }
+        close(fd); });
+
+    while (port.load(std::memory_order_acquire) == 0)
+    {
+        std::this_thread::yield();
+    }
+
+    int fd = net::connect_to_server("127.0.0.1", port.load());
+    EXPECT_GE(fd, 0);
+    if (fd >= 0)
+    {
+        close(fd);
+    }
+
+    server.join();
 }
