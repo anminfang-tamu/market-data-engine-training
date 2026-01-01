@@ -1,10 +1,10 @@
-Start testing: Dec 31 23:12 CST
+Start testing: Jan 01 16:13 CST
 ----------------------------------------------------------
-1/12 Testing: Protocol.RoundTrip
-1/12 Test: Protocol.RoundTrip
+1/13 Testing: Protocol.RoundTrip
+1/13 Test: Protocol.RoundTrip
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTrip" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTrip" start time: Dec 31 23:12 CST
+"Protocol.RoundTrip" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -20,18 +20,18 @@ Note: Google Test filter = Protocol.RoundTrip
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTrip" end time: Dec 31 23:12 CST
+"Protocol.RoundTrip" end time: Jan 01 16:13 CST
 "Protocol.RoundTrip" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-2/12 Testing: Protocol.RoundTripWithMsgZero
-2/12 Test: Protocol.RoundTripWithMsgZero
+2/13 Testing: Protocol.RoundTripWithMsgZero
+2/13 Test: Protocol.RoundTripWithMsgZero
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgZero" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTripWithMsgZero" start time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgZero" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -50,15 +50,15 @@ Note: Google Test filter = Protocol.RoundTripWithMsgZero
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTripWithMsgZero" end time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgZero" end time: Jan 01 16:13 CST
 "Protocol.RoundTripWithMsgZero" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-3/12 Testing: Protocol.RoundTripWithMsgMax
-3/12 Test: Protocol.RoundTripWithMsgMax
+3/13 Testing: Protocol.RoundTripWithMsgMax
+3/13 Test: Protocol.RoundTripWithMsgMax
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMax" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTripWithMsgMax" start time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgMax" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -74,18 +74,18 @@ Note: Google Test filter = Protocol.RoundTripWithMsgMax
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTripWithMsgMax" end time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgMax" end time: Jan 01 16:13 CST
 "Protocol.RoundTripWithMsgMax" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-4/12 Testing: Protocol.RoundTripWithMsgMin
-4/12 Test: Protocol.RoundTripWithMsgMin
+4/13 Testing: Protocol.RoundTripWithMsgMin
+4/13 Test: Protocol.RoundTripWithMsgMin
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMin" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTripWithMsgMin" start time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgMin" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -104,15 +104,15 @@ Note: Google Test filter = Protocol.RoundTripWithMsgMin
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTripWithMsgMin" end time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgMin" end time: Jan 01 16:13 CST
 "Protocol.RoundTripWithMsgMin" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-5/12 Testing: Protocol.RoundTripWithMsgNegative
-5/12 Test: Protocol.RoundTripWithMsgNegative
+5/13 Testing: Protocol.RoundTripWithMsgNegative
+5/13 Test: Protocol.RoundTripWithMsgNegative
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgNegative" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTripWithMsgNegative" start time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgNegative" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -128,18 +128,18 @@ Note: Google Test filter = Protocol.RoundTripWithMsgNegative
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.02 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTripWithMsgNegative" end time: Dec 31 23:12 CST
+"Protocol.RoundTripWithMsgNegative" end time: Jan 01 16:13 CST
 "Protocol.RoundTripWithMsgNegative" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-6/12 Testing: Protocol.RoundTripWithTwiceDuplicateMsg
-6/12 Test: Protocol.RoundTripWithTwiceDuplicateMsg
+6/13 Testing: Protocol.RoundTripWithTwiceDuplicateMsg
+6/13 Test: Protocol.RoundTripWithTwiceDuplicateMsg
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithTwiceDuplicateMsg" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.RoundTripWithTwiceDuplicateMsg" start time: Dec 31 23:12 CST
+"Protocol.RoundTripWithTwiceDuplicateMsg" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -155,18 +155,18 @@ Note: Google Test filter = Protocol.RoundTripWithTwiceDuplicateMsg
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.03 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.RoundTripWithTwiceDuplicateMsg" end time: Dec 31 23:12 CST
+"Protocol.RoundTripWithTwiceDuplicateMsg" end time: Jan 01 16:13 CST
 "Protocol.RoundTripWithTwiceDuplicateMsg" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-7/12 Testing: Protocol.ByteCorrupt
-7/12 Test: Protocol.ByteCorrupt
+7/13 Testing: Protocol.ByteCorrupt
+7/13 Test: Protocol.ByteCorrupt
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.ByteCorrupt" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.ByteCorrupt" start time: Dec 31 23:12 CST
+"Protocol.ByteCorrupt" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -185,15 +185,15 @@ Note: Google Test filter = Protocol.ByteCorrupt
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.ByteCorrupt" end time: Dec 31 23:12 CST
+"Protocol.ByteCorrupt" end time: Jan 01 16:13 CST
 "Protocol.ByteCorrupt" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-8/12 Testing: Protocol.DecodeSizeNotMatch
-8/12 Test: Protocol.DecodeSizeNotMatch
+8/13 Testing: Protocol.DecodeSizeNotMatch
+8/13 Test: Protocol.DecodeSizeNotMatch
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.DecodeSizeNotMatch" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"Protocol.DecodeSizeNotMatch" start time: Dec 31 23:12 CST
+"Protocol.DecodeSizeNotMatch" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -212,15 +212,15 @@ Note: Google Test filter = Protocol.DecodeSizeNotMatch
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"Protocol.DecodeSizeNotMatch" end time: Dec 31 23:12 CST
+"Protocol.DecodeSizeNotMatch" end time: Jan 01 16:13 CST
 "Protocol.DecodeSizeNotMatch" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-9/12 Testing: TcpServer.RecvExactReadsFullBuffer
-9/12 Test: TcpServer.RecvExactReadsFullBuffer
+9/13 Testing: TcpServer.RecvExactReadsFullBuffer
+9/13 Test: TcpServer.RecvExactReadsFullBuffer
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpServer.RecvExactReadsFullBuffer" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"TcpServer.RecvExactReadsFullBuffer" start time: Dec 31 23:12 CST
+"TcpServer.RecvExactReadsFullBuffer" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -239,15 +239,15 @@ Note: Google Test filter = TcpServer.RecvExactReadsFullBuffer
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"TcpServer.RecvExactReadsFullBuffer" end time: Dec 31 23:12 CST
+"TcpServer.RecvExactReadsFullBuffer" end time: Jan 01 16:13 CST
 "TcpServer.RecvExactReadsFullBuffer" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-10/12 Testing: TcpServer.HandleClientCallsCallback
-10/12 Test: TcpServer.HandleClientCallsCallback
+10/13 Testing: TcpServer.HandleClientCallsCallback
+10/13 Test: TcpServer.HandleClientCallsCallback
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpServer.HandleClientCallsCallback" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"TcpServer.HandleClientCallsCallback" start time: Dec 31 23:12 CST
+"TcpServer.HandleClientCallsCallback" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -266,15 +266,15 @@ Note: Google Test filter = TcpServer.HandleClientCallsCallback
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"TcpServer.HandleClientCallsCallback" end time: Dec 31 23:12 CST
+"TcpServer.HandleClientCallsCallback" end time: Jan 01 16:13 CST
 "TcpServer.HandleClientCallsCallback" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-11/12 Testing: TcpClient.SendAllRecvLoop
-11/12 Test: TcpClient.SendAllRecvLoop
+11/13 Testing: TcpClient.SendAllRecvLoop
+11/13 Test: TcpClient.SendAllRecvLoop
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpClient.SendAllRecvLoop" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"TcpClient.SendAllRecvLoop" start time: Dec 31 23:12 CST
+"TcpClient.SendAllRecvLoop" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -290,18 +290,18 @@ Note: Google Test filter = TcpClient.SendAllRecvLoop
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.02 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"TcpClient.SendAllRecvLoop" end time: Dec 31 23:12 CST
+"TcpClient.SendAllRecvLoop" end time: Jan 01 16:13 CST
 "TcpClient.SendAllRecvLoop" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-12/12 Testing: TcpClient.ConnectToServer
-12/12 Test: TcpClient.ConnectToServer
+12/13 Testing: TcpClient.ConnectToServer
+12/13 Test: TcpClient.ConnectToServer
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpClient.ConnectToServer" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"TcpClient.ConnectToServer" start time: Dec 31 23:12 CST
+"TcpClient.ConnectToServer" start time: Jan 01 16:13 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -318,11 +318,39 @@ Connect to server
 [==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.02 sec
+Test time =   0.03 sec
 ----------------------------------------------------------
 Test Passed.
-"TcpClient.ConnectToServer" end time: Dec 31 23:12 CST
+"TcpClient.ConnectToServer" end time: Jan 01 16:13 CST
 "TcpClient.ConnectToServer" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Dec 31 23:12 CST
+13/13 Testing: GeneratorTest.Connect
+13/13 Test: GeneratorTest.Connect
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=GeneratorTest.Connect" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"GeneratorTest.Connect" start time: Jan 01 16:13 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = GeneratorTest.Connect
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from GeneratorTest
+[ RUN      ] GeneratorTest.Connect
+Connect to server
+[       OK ] GeneratorTest.Connect (0 ms)
+[----------] 1 test from GeneratorTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (31 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratorTest.Connect" end time: Jan 01 16:13 CST
+"GeneratorTest.Connect" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 01 16:13 CST
