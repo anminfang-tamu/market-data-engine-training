@@ -1,2 +1,2 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libcommon_lib.a CMakeFiles/common_lib.dir/common/logging/logger.cpp.o CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ar qc libcommon_lib.a CMakeFiles/common_lib.dir/common/logging/logger.cpp.o CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o
 /Library/Developer/CommandLineTools/usr/bin/ranlib libcommon_lib.a

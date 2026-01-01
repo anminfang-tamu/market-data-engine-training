@@ -176,12 +176,12 @@ third_party/googletest/googletest/clean: third_party/googletest/googletest/CMake
 src/CMakeFiles/engine_lib.dir/all: src/CMakeFiles/common_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/engine_lib.dir/build.make src/CMakeFiles/engine_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/engine_lib.dir/build.make src/CMakeFiles/engine_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=8,9,10,11,12,13 "Built target engine_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=6,7,8,9,10,11 "Built target engine_lib"
 .PHONY : src/CMakeFiles/engine_lib.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/engine_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/engine_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/engine_lib.dir/rule
@@ -203,12 +203,12 @@ src/CMakeFiles/engine_app.dir/all: src/CMakeFiles/engine_lib.dir/all
 src/CMakeFiles/engine_app.dir/all: src/CMakeFiles/common_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/engine_app.dir/build.make src/CMakeFiles/engine_app.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/engine_app.dir/build.make src/CMakeFiles/engine_app.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=6,7 "Built target engine_app"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=4,5 "Built target engine_app"
 .PHONY : src/CMakeFiles/engine_app.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/engine_app.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/engine_app.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/engine_app.dir/rule
@@ -229,12 +229,12 @@ src/CMakeFiles/engine_app.dir/clean:
 src/CMakeFiles/generator_lib.dir/all: src/CMakeFiles/common_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/generator_lib.dir/build.make src/CMakeFiles/generator_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/generator_lib.dir/build.make src/CMakeFiles/generator_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=16,17 "Built target generator_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=14,15 "Built target generator_lib"
 .PHONY : src/CMakeFiles/generator_lib.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/generator_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/generator_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/generator_lib.dir/rule
@@ -256,12 +256,12 @@ src/CMakeFiles/generator_app.dir/all: src/CMakeFiles/generator_lib.dir/all
 src/CMakeFiles/generator_app.dir/all: src/CMakeFiles/common_lib.dir/all
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/generator_app.dir/build.make src/CMakeFiles/generator_app.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/generator_app.dir/build.make src/CMakeFiles/generator_app.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=14,15 "Built target generator_app"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=12,13 "Built target generator_app"
 .PHONY : src/CMakeFiles/generator_app.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/generator_app.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/generator_app.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/generator_app.dir/rule
@@ -282,12 +282,12 @@ src/CMakeFiles/generator_app.dir/clean:
 src/CMakeFiles/common_lib.dir/all:
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target common_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=1,2,3 "Built target common_lib"
 .PHONY : src/CMakeFiles/common_lib.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/common_lib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/common_lib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/common_lib.dir/rule
@@ -310,12 +310,12 @@ tests/CMakeFiles/protocol_tests.dir/all: third_party/googletest/googletest/CMake
 tests/CMakeFiles/protocol_tests.dir/all: third_party/googletest/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=26,27,28 "Built target protocol_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=24,25,26,27 "Built target protocol_tests"
 .PHONY : tests/CMakeFiles/protocol_tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/protocol_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protocol_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/protocol_tests.dir/rule
@@ -336,7 +336,7 @@ tests/CMakeFiles/protocol_tests.dir/clean:
 third_party/googletest/googlemock/CMakeFiles/gmock.dir/all: third_party/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googlemock/CMakeFiles/gmock.dir/build.make third_party/googletest/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googlemock/CMakeFiles/gmock.dir/build.make third_party/googletest/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=18,19 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=16,17 "Built target gmock"
 .PHONY : third_party/googletest/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -363,7 +363,7 @@ third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/all: third_party/goo
 third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/all: third_party/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/build.make third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/build.make third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=20,21 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=18,19 "Built target gmock_main"
 .PHONY : third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -389,7 +389,7 @@ third_party/googletest/googlemock/CMakeFiles/gmock_main.dir/clean:
 third_party/googletest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googletest/CMakeFiles/gtest.dir/build.make third_party/googletest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googletest/CMakeFiles/gtest.dir/build.make third_party/googletest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=22,23 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=20,21 "Built target gtest"
 .PHONY : third_party/googletest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -415,7 +415,7 @@ third_party/googletest/googletest/CMakeFiles/gtest.dir/clean:
 third_party/googletest/googletest/CMakeFiles/gtest_main.dir/all: third_party/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googletest/CMakeFiles/gtest_main.dir/build.make third_party/googletest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party/googletest/googletest/CMakeFiles/gtest_main.dir/build.make third_party/googletest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=24,25 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=22,23 "Built target gtest_main"
 .PHONY : third_party/googletest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.

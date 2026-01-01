@@ -289,54 +289,6 @@ common/metrics/metrics.cpp.s:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.s
 .PHONY : common/metrics/metrics.cpp.s
 
-common/net/tcp_client.o: common/net/tcp_client.cpp.o
-.PHONY : common/net/tcp_client.o
-
-# target to build an object file
-common/net/tcp_client.cpp.o:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o
-.PHONY : common/net/tcp_client.cpp.o
-
-common/net/tcp_client.i: common/net/tcp_client.cpp.i
-.PHONY : common/net/tcp_client.i
-
-# target to preprocess a source file
-common/net/tcp_client.cpp.i:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.i
-.PHONY : common/net/tcp_client.cpp.i
-
-common/net/tcp_client.s: common/net/tcp_client.cpp.s
-.PHONY : common/net/tcp_client.s
-
-# target to generate assembly for a file
-common/net/tcp_client.cpp.s:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.s
-.PHONY : common/net/tcp_client.cpp.s
-
-common/net/tcp_server.o: common/net/tcp_server.cpp.o
-.PHONY : common/net/tcp_server.o
-
-# target to build an object file
-common/net/tcp_server.cpp.o:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o
-.PHONY : common/net/tcp_server.cpp.o
-
-common/net/tcp_server.i: common/net/tcp_server.cpp.i
-.PHONY : common/net/tcp_server.i
-
-# target to preprocess a source file
-common/net/tcp_server.cpp.i:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.i
-.PHONY : common/net/tcp_server.cpp.i
-
-common/net/tcp_server.s: common/net/tcp_server.cpp.s
-.PHONY : common/net/tcp_server.s
-
-# target to generate assembly for a file
-common/net/tcp_server.cpp.s:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/common_lib.dir/build.make src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.s
-.PHONY : common/net/tcp_server.cpp.s
-
 engine/act/order_mock.o: engine/act/order_mock.cpp.o
 .PHONY : engine/act/order_mock.o
 
@@ -553,12 +505,6 @@ help:
 	@echo "... common/metrics/metrics.o"
 	@echo "... common/metrics/metrics.i"
 	@echo "... common/metrics/metrics.s"
-	@echo "... common/net/tcp_client.o"
-	@echo "... common/net/tcp_client.i"
-	@echo "... common/net/tcp_client.s"
-	@echo "... common/net/tcp_server.o"
-	@echo "... common/net/tcp_server.i"
-	@echo "... common/net/tcp_server.s"
 	@echo "... engine/act/order_mock.o"
 	@echo "... engine/act/order_mock.i"
 	@echo "... engine/act/order_mock.s"

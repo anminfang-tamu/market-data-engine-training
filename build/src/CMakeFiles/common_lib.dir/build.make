@@ -97,51 +97,19 @@ src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.s"
 	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/anminfang/Documents/md-engine-training/src/common/metrics/metrics.cpp -o CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.s
 
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o: src/CMakeFiles/common_lib.dir/flags.make
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o: /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o: src/CMakeFiles/common_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o -MF CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o.d -o CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o -c /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.i"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp > CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.i
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.s"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp -o CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.s
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: src/CMakeFiles/common_lib.dir/flags.make
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: src/CMakeFiles/common_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o -MF CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o.d -o CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o -c /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.i"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp > CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.i
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.s"
-	cd /Users/anminfang/Documents/md-engine-training/build/src && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp -o CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.s
-
 # Object files for target common_lib
 common_lib_OBJECTS = \
 "CMakeFiles/common_lib.dir/common/logging/logger.cpp.o" \
-"CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o" \
-"CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o" \
-"CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o"
+"CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o"
 
 # External object files for target common_lib
 common_lib_EXTERNAL_OBJECTS =
 
 src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/common/logging/logger.cpp.o
 src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o
-src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o
-src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o
 src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/build.make
 src/libcommon_lib.a: src/CMakeFiles/common_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libcommon_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library libcommon_lib.a"
 	cd /Users/anminfang/Documents/md-engine-training/build/src && $(CMAKE_COMMAND) -P CMakeFiles/common_lib.dir/cmake_clean_target.cmake
 	cd /Users/anminfang/Documents/md-engine-training/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/common_lib.dir/link.txt --verbose=$(VERBOSE)
 

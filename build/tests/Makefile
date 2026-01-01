@@ -209,29 +209,53 @@ unit/test_protocol.cpp.s:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.s
 .PHONY : unit/test_protocol.cpp.s
 
-unit/test_tcp_server.o: unit/test_tcp_server.cpp.o
-.PHONY : unit/test_tcp_server.o
+unit/test_tcp_client_block.o: unit/test_tcp_client_block.cpp.o
+.PHONY : unit/test_tcp_client_block.o
 
 # target to build an object file
-unit/test_tcp_server.cpp.o:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o
-.PHONY : unit/test_tcp_server.cpp.o
+unit/test_tcp_client_block.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o
+.PHONY : unit/test_tcp_client_block.cpp.o
 
-unit/test_tcp_server.i: unit/test_tcp_server.cpp.i
-.PHONY : unit/test_tcp_server.i
+unit/test_tcp_client_block.i: unit/test_tcp_client_block.cpp.i
+.PHONY : unit/test_tcp_client_block.i
 
 # target to preprocess a source file
-unit/test_tcp_server.cpp.i:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.i
-.PHONY : unit/test_tcp_server.cpp.i
+unit/test_tcp_client_block.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.i
+.PHONY : unit/test_tcp_client_block.cpp.i
 
-unit/test_tcp_server.s: unit/test_tcp_server.cpp.s
-.PHONY : unit/test_tcp_server.s
+unit/test_tcp_client_block.s: unit/test_tcp_client_block.cpp.s
+.PHONY : unit/test_tcp_client_block.s
 
 # target to generate assembly for a file
-unit/test_tcp_server.cpp.s:
-	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.s
-.PHONY : unit/test_tcp_server.cpp.s
+unit/test_tcp_client_block.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.s
+.PHONY : unit/test_tcp_client_block.cpp.s
+
+unit/test_tcp_server_block.o: unit/test_tcp_server_block.cpp.o
+.PHONY : unit/test_tcp_server_block.o
+
+# target to build an object file
+unit/test_tcp_server_block.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o
+.PHONY : unit/test_tcp_server_block.cpp.o
+
+unit/test_tcp_server_block.i: unit/test_tcp_server_block.cpp.i
+.PHONY : unit/test_tcp_server_block.i
+
+# target to preprocess a source file
+unit/test_tcp_server_block.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.i
+.PHONY : unit/test_tcp_server_block.cpp.i
+
+unit/test_tcp_server_block.s: unit/test_tcp_server_block.cpp.s
+.PHONY : unit/test_tcp_server_block.s
+
+# target to generate assembly for a file
+unit/test_tcp_server_block.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.s
+.PHONY : unit/test_tcp_server_block.cpp.s
 
 # Help Target
 help:
@@ -250,9 +274,12 @@ help:
 	@echo "... unit/test_protocol.o"
 	@echo "... unit/test_protocol.i"
 	@echo "... unit/test_protocol.s"
-	@echo "... unit/test_tcp_server.o"
-	@echo "... unit/test_tcp_server.i"
-	@echo "... unit/test_tcp_server.s"
+	@echo "... unit/test_tcp_client_block.o"
+	@echo "... unit/test_tcp_client_block.i"
+	@echo "... unit/test_tcp_client_block.s"
+	@echo "... unit/test_tcp_server_block.o"
+	@echo "... unit/test_tcp_server_block.i"
+	@echo "... unit/test_tcp_server_block.s"
 .PHONY : help
 
 

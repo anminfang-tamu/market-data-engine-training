@@ -308,20 +308,6 @@ build src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o: CXX_COMPILER__
   OBJECT_DIR = src/CMakeFiles/common_lib.dir
   OBJECT_FILE_DIR = src/CMakeFiles/common_lib.dir/common/metrics
 
-build src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o: CXX_COMPILER__common_lib_unscanned_Debug /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp || cmake_object_order_depends_target_common_lib
-  DEP_FILE = src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o.d
-  FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
-  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include
-  OBJECT_DIR = src/CMakeFiles/common_lib.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/common_lib.dir/common/net
-
-build src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: CXX_COMPILER__common_lib_unscanned_Debug /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp || cmake_object_order_depends_target_common_lib
-  DEP_FILE = src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o.d
-  FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
-  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include
-  OBJECT_DIR = src/CMakeFiles/common_lib.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/common_lib.dir/common/net
-
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target common_lib
@@ -330,7 +316,7 @@ build src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: CXX_COMPILER__c
 #############################################
 # Link the static library src/libcommon_lib.a
 
-build src/libcommon_lib.a: CXX_STATIC_LIBRARY_LINKER__common_lib_Debug src/CMakeFiles/common_lib.dir/common/logging/logger.cpp.o src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o
+build src/libcommon_lib.a: CXX_STATIC_LIBRARY_LINKER__common_lib_Debug src/CMakeFiles/common_lib.dir/common/logging/logger.cpp.o src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = src/CMakeFiles/common_lib.dir
@@ -438,8 +424,15 @@ build tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o: CXX_COMPILER
   OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
   OBJECT_FILE_DIR = tests/CMakeFiles/protocol_tests.dir/unit
 
-build tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o: CXX_COMPILER__protocol_tests_unscanned_Debug /Users/anminfang/Documents/md-engine-training/tests/unit/test_tcp_server.cpp || cmake_object_order_depends_target_protocol_tests
-  DEP_FILE = tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o.d
+build tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o: CXX_COMPILER__protocol_tests_unscanned_Debug /Users/anminfang/Documents/md-engine-training/tests/unit/test_tcp_server_block.cpp || cmake_object_order_depends_target_protocol_tests
+  DEP_FILE = tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o.d
+  FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
+  INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src/protocol -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest
+  OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/protocol_tests.dir/unit
+
+build tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o: CXX_COMPILER__protocol_tests_unscanned_Debug /Users/anminfang/Documents/md-engine-training/tests/unit/test_tcp_client_block.cpp || cmake_object_order_depends_target_protocol_tests
+  DEP_FILE = tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o.d
   FLAGS = -g -std=c++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
   INCLUDES = -I/Users/anminfang/Documents/md-engine-training/src/protocol -I/Users/anminfang/Documents/md-engine-training/src -I/Users/anminfang/Documents/md-engine-training/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/include -isystem /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest
   OBJECT_DIR = tests/CMakeFiles/protocol_tests.dir
@@ -453,7 +446,7 @@ build tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o: CXX_COMPIL
 #############################################
 # Link the executable tests/protocol_tests
 
-build tests/protocol_tests tests/protocol_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/protocol_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__protocol_tests_Debug tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server.cpp.o | lib/libgtest_main.a src/libcommon_lib.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/libcommon_lib.a
+build tests/protocol_tests tests/protocol_tests[1]_tests.cmake | ${cmake_ninja_workdir}tests/protocol_tests[1]_tests.cmake: CXX_EXECUTABLE_LINKER__protocol_tests_Debug tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o | lib/libgtest_main.a src/libcommon_lib.a lib/libgtest.a || lib/libgtest.a lib/libgtest_main.a src/libcommon_lib.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.7
   LINK_FLAGS = -L/usr/local/opt/openssl@1.1/lib
   LINK_LIBRARIES = lib/libgtest_main.a  src/libcommon_lib.a  lib/libgtest.a

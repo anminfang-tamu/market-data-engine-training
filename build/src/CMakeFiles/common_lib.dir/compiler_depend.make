@@ -5,14 +5,6 @@ src/CMakeFiles/common_lib.dir/common/logging/logger.cpp.o: /Users/anminfang/Docu
 
 src/CMakeFiles/common_lib.dir/common/metrics/metrics.cpp.o: /Users/anminfang/Documents/md-engine-training/src/common/metrics/metrics.cpp
 
-src/CMakeFiles/common_lib.dir/common/net/tcp_client.cpp.o: /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp
-
-src/CMakeFiles/common_lib.dir/common/net/tcp_server.cpp.o: /Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp
-
-
-/Users/anminfang/Documents/md-engine-training/src/common/net/tcp_server.cpp:
-
-/Users/anminfang/Documents/md-engine-training/src/common/net/tcp_client.cpp:
 
 /Users/anminfang/Documents/md-engine-training/src/common/metrics/metrics.cpp:
 

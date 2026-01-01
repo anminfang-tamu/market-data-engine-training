@@ -1,12 +1,14 @@
-Protocol.RoundTrip 15 0.00179477
+Protocol.RoundTrip 22 0.00125699
 Protocol.DecodeSize 1 0.0402565
-Protocol.DecodeSizeNotMatch 11 0.00217384
-Protocol.RoundTripWithMsgZero 10 0.00192106
-Protocol.RoundTripWithMsgMax 9 0.00309994
-Protocol.RoundTripWithMsgMin 8 0.0025467
-Protocol.RoundTripWithMsgNegative 7 0.0034043
-Protocol.RoundTripWithTwiceDuplicateMsg 5 0.00338727
-Protocol.ByteCorrupt 4 0.00472591
-TcpServer.RecvExactReadsFullBuffer 1 0.0343077
-TcpServer.HandleClientCallsCallback 1 0.0154142
+Protocol.DecodeSizeNotMatch 18 0.00149406
+Protocol.RoundTripWithMsgZero 17 0.00154012
+Protocol.RoundTripWithMsgMax 16 0.00120423
+Protocol.RoundTripWithMsgMin 15 0.00155879
+Protocol.RoundTripWithMsgNegative 14 0.00108429
+Protocol.RoundTripWithTwiceDuplicateMsg 12 0.00159541
+Protocol.ByteCorrupt 11 0.0017458
+TcpServer.RecvExactReadsFullBuffer 8 0.00226622
+TcpServer.HandleClientCallsCallback 8 0.00301359
+TcpClient.SendAll 2 0.00622585
+TcpClient.SendAllRecvLoop 2 0.0123424
 ---
