@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o"
+  "CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o.d"
   "CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o"
   "CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o.d"
   "CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o"

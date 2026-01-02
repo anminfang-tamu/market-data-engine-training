@@ -185,6 +185,30 @@ protocol_tests/fast:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/build
 .PHONY : protocol_tests/fast
 
+unit/test_generator.o: unit/test_generator.cpp.o
+.PHONY : unit/test_generator.o
+
+# target to build an object file
+unit/test_generator.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o
+.PHONY : unit/test_generator.cpp.o
+
+unit/test_generator.i: unit/test_generator.cpp.i
+.PHONY : unit/test_generator.i
+
+# target to preprocess a source file
+unit/test_generator.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.i
+.PHONY : unit/test_generator.cpp.i
+
+unit/test_generator.s: unit/test_generator.cpp.s
+.PHONY : unit/test_generator.s
+
+# target to generate assembly for a file
+unit/test_generator.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.s
+.PHONY : unit/test_generator.cpp.s
+
 unit/test_protocol.o: unit/test_protocol.cpp.o
 .PHONY : unit/test_protocol.o
 
@@ -271,6 +295,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... protocol_tests"
+	@echo "... unit/test_generator.o"
+	@echo "... unit/test_generator.i"
+	@echo "... unit/test_generator.s"
 	@echo "... unit/test_protocol.o"
 	@echo "... unit/test_protocol.i"
 	@echo "... unit/test_protocol.s"

@@ -961,8 +961,12 @@ src/CMakeFiles/engine_app.dir/engine/main.cpp.o: /Users/anminfang/Documents/md-e
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdarg.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stddef.h \
-  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h
+  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h \
+  /Users/anminfang/Documents/md-engine-training/src/engine/engine.hpp \
+  /Users/anminfang/Documents/md-engine-training/src/protocol/md_message.hpp
 
+
+/Users/anminfang/Documents/md-engine-training/src/engine/engine.hpp:
 
 /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h:
 
@@ -2105,6 +2109,8 @@ src/CMakeFiles/engine_app.dir/engine/main.cpp.o: /Users/anminfang/Documents/md-e
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/comp.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/iter_swap.h:
+
+/Users/anminfang/Documents/md-engine-training/src/protocol/md_message.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__bit/countr.h:
 

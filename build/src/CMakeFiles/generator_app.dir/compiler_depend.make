@@ -961,8 +961,12 @@ src/CMakeFiles/generator_app.dir/generator/main.cpp.o: /Users/anminfang/Document
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/ptrcheck.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdarg.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stddef.h \
-  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h
+  /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h \
+  /Users/anminfang/Documents/md-engine-training/src/generator/generator.hpp \
+  /Users/anminfang/Documents/md-engine-training/src/protocol/md_message.hpp
 
+
+/Users/anminfang/Documents/md-engine-training/src/generator/generator.hpp:
 
 /Library/Developer/CommandLineTools/usr/lib/clang/17/include/stdint.h:
 
@@ -2107,6 +2111,8 @@ src/CMakeFiles/generator_app.dir/generator/main.cpp.o: /Users/anminfang/Document
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/comp.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__algorithm/iter_swap.h:
+
+/Users/anminfang/Documents/md-engine-training/src/protocol/md_message.hpp:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX26.2.sdk/usr/include/c++/v1/__bit/countr.h:
 
