@@ -58,6 +58,7 @@ namespace generator
         rng_state_ = static_cast<uint32_t>(seed);
         seq_ = 0;
 
+        // no rate: as fast as possible
         if (rate <= 0)
         {
             for (int i = 0; i < count; i++)
