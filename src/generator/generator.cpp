@@ -107,7 +107,7 @@ namespace generator
         */
         int64_t bid = 10 + static_cast<int64_t>(rng_state_ % 991);
         int64_t ask = bid + 1;
-        uint32_t size = 1u + (rng_state_ % 100);
+        int32_t size = 1u + (rng_state_ % 100);
         ++seq_;
         ++symbol_count_;
         return {sym, ts, bid, ask, size, size + 1};

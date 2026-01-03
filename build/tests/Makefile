@@ -209,6 +209,30 @@ unit/test_generator.cpp.s:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.s
 .PHONY : unit/test_generator.cpp.s
 
+unit/test_normalize.o: unit/test_normalize.cpp.o
+.PHONY : unit/test_normalize.o
+
+# target to build an object file
+unit/test_normalize.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o
+.PHONY : unit/test_normalize.cpp.o
+
+unit/test_normalize.i: unit/test_normalize.cpp.i
+.PHONY : unit/test_normalize.i
+
+# target to preprocess a source file
+unit/test_normalize.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.i
+.PHONY : unit/test_normalize.cpp.i
+
+unit/test_normalize.s: unit/test_normalize.cpp.s
+.PHONY : unit/test_normalize.s
+
+# target to generate assembly for a file
+unit/test_normalize.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.s
+.PHONY : unit/test_normalize.cpp.s
+
 unit/test_protocol.o: unit/test_protocol.cpp.o
 .PHONY : unit/test_protocol.o
 
@@ -298,6 +322,9 @@ help:
 	@echo "... unit/test_generator.o"
 	@echo "... unit/test_generator.i"
 	@echo "... unit/test_generator.s"
+	@echo "... unit/test_normalize.o"
+	@echo "... unit/test_normalize.i"
+	@echo "... unit/test_normalize.s"
 	@echo "... unit/test_protocol.o"
 	@echo "... unit/test_protocol.i"
 	@echo "... unit/test_protocol.s"

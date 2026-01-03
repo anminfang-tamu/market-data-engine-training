@@ -125,12 +125,27 @@ tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.s"
 	cd /Users/anminfang/Documents/md-engine-training/build/tests && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/anminfang/Documents/md-engine-training/tests/unit/test_generator.cpp -o CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.s
 
+tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o: tests/CMakeFiles/protocol_tests.dir/flags.make
+tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o: /Users/anminfang/Documents/md-engine-training/tests/unit/test_normalize.cpp
+tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o: tests/CMakeFiles/protocol_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o"
+	cd /Users/anminfang/Documents/md-engine-training/build/tests && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o -MF CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o.d -o CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o -c /Users/anminfang/Documents/md-engine-training/tests/unit/test_normalize.cpp
+
+tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.i"
+	cd /Users/anminfang/Documents/md-engine-training/build/tests && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/anminfang/Documents/md-engine-training/tests/unit/test_normalize.cpp > CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.i
+
+tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.s"
+	cd /Users/anminfang/Documents/md-engine-training/build/tests && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/anminfang/Documents/md-engine-training/tests/unit/test_normalize.cpp -o CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.s
+
 # Object files for target protocol_tests
 protocol_tests_OBJECTS = \
 "CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp.o" \
 "CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o" \
 "CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o" \
-"CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o"
+"CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o" \
+"CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o"
 
 # External object files for target protocol_tests
 protocol_tests_EXTERNAL_OBJECTS =
@@ -139,14 +154,16 @@ tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/unit/test_protocol.cpp
 tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_server_block.cpp.o
 tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/unit/test_tcp_client_block.cpp.o
 tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o
+tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o
 tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/build.make
 tests/protocol_tests: lib/libgtest_main.a
 tests/protocol_tests: src/libcommon_lib.a
 tests/protocol_tests: src/libgenerator_lib.a
+tests/protocol_tests: src/libengine_lib.a
 tests/protocol_tests: lib/libgtest.a
 tests/protocol_tests: src/libcommon_lib.a
 tests/protocol_tests: tests/CMakeFiles/protocol_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable protocol_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable protocol_tests"
 	cd /Users/anminfang/Documents/md-engine-training/build/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/protocol_tests.dir/link.txt --verbose=$(VERBOSE)
 	cd /Users/anminfang/Documents/md-engine-training/build/tests && /opt/homebrew/Cellar/cmake/3.30.0/bin/cmake -D TEST_TARGET=protocol_tests -D TEST_EXECUTABLE=/Users/anminfang/Documents/md-engine-training/build/tests/protocol_tests -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/Users/anminfang/Documents/md-engine-training/build/tests -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=protocol_tests_TESTS -D CTEST_FILE=/Users/anminfang/Documents/md-engine-training/build/tests/protocol_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /opt/homebrew/Cellar/cmake/3.30.0/share/cmake/Modules/GoogleTestAddTests.cmake
 

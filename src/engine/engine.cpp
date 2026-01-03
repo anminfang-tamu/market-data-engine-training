@@ -2,6 +2,7 @@
 #include "common/net/tcp_server_block.hpp"
 #include "protocol/md_message.hpp"
 #include "protocol/decode.hpp"
+#include "engine/normalize/normalize.hpp"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -18,14 +19,25 @@ namespace engine
 
     void Engine::on_message(const void *data, size_t len)
     {
-        if (len != protocol::kWireSize)
+        if (!engine::isSizeMatch(len))
         {
+            std::cout << "Message size is not matched!" << std::endl;
+            ++invalid_msg_count_;
             return;
         }
 
         protocol::MarketDataMsg msg{};
-        if (!protocol::decode(static_cast<const uint8_t *>(data), len, msg))
+        if (!engine::decode_msg(data, len, msg))
         {
+            std::cout << "Failed to decode incoming message!" << std::endl;
+            ++invalid_msg_count_;
+            return;
+        }
+
+        if (!engine::sanityCheck(msg))
+        {
+            std::cout << "Failed to pass sanity check!" << std::endl;
+            ++invalid_msg_count_;
             return;
         }
 

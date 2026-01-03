@@ -35,7 +35,7 @@ TEST(Protocol, RoundTripWithMsgZero)
 
 TEST(Protocol, RoundTripWithMsgMax)
 {
-    protocol::MarketDataMsg from{UINT32_MAX, INT64_MAX, INT64_MAX, INT64_MAX, UINT32_MAX, UINT32_MAX};
+    protocol::MarketDataMsg from{UINT32_MAX, INT64_MAX, INT64_MAX, INT64_MAX, INT32_MAX, INT32_MAX};
     auto bytes = protocol::encode(from);
 
     protocol::MarketDataMsg to{};
@@ -50,7 +50,7 @@ TEST(Protocol, RoundTripWithMsgMax)
 
 TEST(Protocol, RoundTripWithMsgMin)
 {
-    protocol::MarketDataMsg from{UINT32_MAX, INT64_MIN, INT64_MIN, INT64_MIN, UINT32_MAX, UINT32_MAX};
+    protocol::MarketDataMsg from{UINT32_MAX, INT64_MIN, INT64_MIN, INT64_MIN, INT32_MAX, INT32_MAX};
     auto bytes = protocol::encode(from);
 
     protocol::MarketDataMsg to{};
@@ -65,7 +65,7 @@ TEST(Protocol, RoundTripWithMsgMin)
 
 TEST(Protocol, RoundTripWithMsgNegative)
 {
-    protocol::MarketDataMsg from{UINT32_MAX, INT64_MIN, -1, 1, UINT32_MAX, UINT32_MAX};
+    protocol::MarketDataMsg from{UINT32_MAX, INT64_MIN, -1, 1, INT32_MAX, INT32_MAX};
     auto bytes = protocol::encode(from);
 
     protocol::MarketDataMsg to{};
