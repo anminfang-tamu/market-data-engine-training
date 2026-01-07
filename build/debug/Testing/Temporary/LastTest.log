@@ -1,48 +1,128 @@
-Start testing: Jan 03 15:45 CST
+Start testing: Jan 07 16:30 CST
 ----------------------------------------------------------
-17/20 Testing: NormalizeTest.matchSize
-17/20 Test: NormalizeTest.matchSize
-Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=NormalizeTest.matchSize" "--gtest_also_run_disabled_tests"
+1/26 Testing: Protocol.RoundTrip
+1/26 Test: Protocol.RoundTrip
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTrip" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"NormalizeTest.matchSize" start time: Jan 03 15:45 CST
+"Protocol.RoundTrip" start time: Jan 07 16:30 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = NormalizeTest.matchSize
+Note: Google Test filter = Protocol.RoundTrip
 [==========] Running 1 test from 1 test suite.
 [----------] Global test environment set-up.
-[----------] 1 test from NormalizeTest
-[ RUN      ] NormalizeTest.matchSize
-Connect to server
-[       OK ] NormalizeTest.matchSize (12 ms)
-[----------] 1 test from NormalizeTest (12 ms total)
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTrip
+[       OK ] Protocol.RoundTrip (0 ms)
+[----------] 1 test from Protocol (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (13 ms total)
+[==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.06 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"NormalizeTest.matchSize" end time: Jan 03 15:45 CST
-"NormalizeTest.matchSize" time elapsed: 00:00:00
+"Protocol.RoundTrip" end time: Jan 07 16:30 CST
+"Protocol.RoundTrip" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-18/20 Testing: NormalizeTest.notMatchSize
-18/20 Test: NormalizeTest.notMatchSize
-Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=NormalizeTest.notMatchSize" "--gtest_also_run_disabled_tests"
+2/26 Testing: Protocol.RoundTripWithMsgZero
+2/26 Test: Protocol.RoundTripWithMsgZero
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgZero" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"NormalizeTest.notMatchSize" start time: Jan 03 15:45 CST
+"Protocol.RoundTripWithMsgZero" start time: Jan 07 16:30 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = NormalizeTest.notMatchSize
+Note: Google Test filter = Protocol.RoundTripWithMsgZero
 [==========] Running 1 test from 1 test suite.
 [----------] Global test environment set-up.
-[----------] 1 test from NormalizeTest
-[ RUN      ] NormalizeTest.notMatchSize
-[       OK ] NormalizeTest.notMatchSize (0 ms)
-[----------] 1 test from NormalizeTest (0 ms total)
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgZero
+[       OK ] Protocol.RoundTripWithMsgZero (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgZero" end time: Jan 07 16:30 CST
+"Protocol.RoundTripWithMsgZero" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/26 Testing: Protocol.RoundTripWithMsgMax
+3/26 Test: Protocol.RoundTripWithMsgMax
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMax" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgMax" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgMax
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgMax
+[       OK ] Protocol.RoundTripWithMsgMax (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgMax" end time: Jan 07 16:30 CST
+"Protocol.RoundTripWithMsgMax" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/26 Testing: Protocol.RoundTripWithMsgMin
+4/26 Test: Protocol.RoundTripWithMsgMin
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgMin" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgMin" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgMin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgMin
+[       OK ] Protocol.RoundTripWithMsgMin (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithMsgMin" end time: Jan 07 16:30 CST
+"Protocol.RoundTripWithMsgMin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/26 Testing: Protocol.RoundTripWithMsgNegative
+5/26 Test: Protocol.RoundTripWithMsgNegative
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithMsgNegative" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithMsgNegative" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithMsgNegative
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithMsgNegative
+[       OK ] Protocol.RoundTripWithMsgNegative (0 ms)
+[----------] 1 test from Protocol (0 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test suite ran. (0 ms total)
@@ -51,15 +131,344 @@ Note: Google Test filter = NormalizeTest.notMatchSize
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"NormalizeTest.notMatchSize" end time: Jan 03 15:45 CST
-"NormalizeTest.notMatchSize" time elapsed: 00:00:00
+"Protocol.RoundTripWithMsgNegative" end time: Jan 07 16:30 CST
+"Protocol.RoundTripWithMsgNegative" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-19/20 Testing: NormalizeTest.sanityCheck
-19/20 Test: NormalizeTest.sanityCheck
+6/26 Testing: Protocol.RoundTripWithTwiceDuplicateMsg
+6/26 Test: Protocol.RoundTripWithTwiceDuplicateMsg
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.RoundTripWithTwiceDuplicateMsg" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.RoundTripWithTwiceDuplicateMsg" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.RoundTripWithTwiceDuplicateMsg
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.RoundTripWithTwiceDuplicateMsg
+[       OK ] Protocol.RoundTripWithTwiceDuplicateMsg (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.RoundTripWithTwiceDuplicateMsg" end time: Jan 07 16:30 CST
+"Protocol.RoundTripWithTwiceDuplicateMsg" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/26 Testing: Protocol.ByteCorrupt
+7/26 Test: Protocol.ByteCorrupt
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.ByteCorrupt" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.ByteCorrupt" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.ByteCorrupt
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.ByteCorrupt
+[       OK ] Protocol.ByteCorrupt (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.ByteCorrupt" end time: Jan 07 16:30 CST
+"Protocol.ByteCorrupt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/26 Testing: Protocol.DecodeSizeNotMatch
+8/26 Test: Protocol.DecodeSizeNotMatch
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=Protocol.DecodeSizeNotMatch" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"Protocol.DecodeSizeNotMatch" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = Protocol.DecodeSizeNotMatch
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Protocol
+[ RUN      ] Protocol.DecodeSizeNotMatch
+[       OK ] Protocol.DecodeSizeNotMatch (0 ms)
+[----------] 1 test from Protocol (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Protocol.DecodeSizeNotMatch" end time: Jan 07 16:30 CST
+"Protocol.DecodeSizeNotMatch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/26 Testing: TcpServer.RecvExactReadsFullBuffer
+9/26 Test: TcpServer.RecvExactReadsFullBuffer
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpServer.RecvExactReadsFullBuffer" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"TcpServer.RecvExactReadsFullBuffer" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = TcpServer.RecvExactReadsFullBuffer
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TcpServer
+[ RUN      ] TcpServer.RecvExactReadsFullBuffer
+[       OK ] TcpServer.RecvExactReadsFullBuffer (0 ms)
+[----------] 1 test from TcpServer (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TcpServer.RecvExactReadsFullBuffer" end time: Jan 07 16:30 CST
+"TcpServer.RecvExactReadsFullBuffer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/26 Testing: TcpServer.HandleClientCallsCallback
+10/26 Test: TcpServer.HandleClientCallsCallback
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpServer.HandleClientCallsCallback" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"TcpServer.HandleClientCallsCallback" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = TcpServer.HandleClientCallsCallback
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TcpServer
+[ RUN      ] TcpServer.HandleClientCallsCallback
+[       OK ] TcpServer.HandleClientCallsCallback (0 ms)
+[----------] 1 test from TcpServer (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TcpServer.HandleClientCallsCallback" end time: Jan 07 16:30 CST
+"TcpServer.HandleClientCallsCallback" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/26 Testing: TcpClient.SendAllRecvLoop
+11/26 Test: TcpClient.SendAllRecvLoop
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpClient.SendAllRecvLoop" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"TcpClient.SendAllRecvLoop" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = TcpClient.SendAllRecvLoop
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TcpClient
+[ RUN      ] TcpClient.SendAllRecvLoop
+[       OK ] TcpClient.SendAllRecvLoop (0 ms)
+[----------] 1 test from TcpClient (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TcpClient.SendAllRecvLoop" end time: Jan 07 16:30 CST
+"TcpClient.SendAllRecvLoop" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/26 Testing: TcpClient.ConnectToServer
+12/26 Test: TcpClient.ConnectToServer
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=TcpClient.ConnectToServer" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"TcpClient.ConnectToServer" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = TcpClient.ConnectToServer
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from TcpClient
+[ RUN      ] TcpClient.ConnectToServer
+Connect to server
+[       OK ] TcpClient.ConnectToServer (0 ms)
+[----------] 1 test from TcpClient (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TcpClient.ConnectToServer" end time: Jan 07 16:30 CST
+"TcpClient.ConnectToServer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/26 Testing: GeneratorTest.Connect
+13/26 Test: GeneratorTest.Connect
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=GeneratorTest.Connect" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"GeneratorTest.Connect" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = GeneratorTest.Connect
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from GeneratorTest
+[ RUN      ] GeneratorTest.Connect
+Connect to server
+[       OK ] GeneratorTest.Connect (0 ms)
+[----------] 1 test from GeneratorTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (62 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratorTest.Connect" end time: Jan 07 16:30 CST
+"GeneratorTest.Connect" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/26 Testing: GeneratorTest.SendAndReceive
+14/26 Test: GeneratorTest.SendAndReceive
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=GeneratorTest.SendAndReceive" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"GeneratorTest.SendAndReceive" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = GeneratorTest.SendAndReceive
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from GeneratorTest
+[ RUN      ] GeneratorTest.SendAndReceive
+Connect to server
+[       OK ] GeneratorTest.SendAndReceive (11 ms)
+[----------] 1 test from GeneratorTest (11 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (113 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratorTest.SendAndReceive" end time: Jan 07 16:30 CST
+"GeneratorTest.SendAndReceive" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/26 Testing: GeneratorTest.RunWithRateZero
+15/26 Test: GeneratorTest.RunWithRateZero
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=GeneratorTest.RunWithRateZero" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"GeneratorTest.RunWithRateZero" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = GeneratorTest.RunWithRateZero
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from GeneratorTest
+[ RUN      ] GeneratorTest.RunWithRateZero
+Connect to server
+[       OK ] GeneratorTest.RunWithRateZero (1225 ms)
+[----------] 1 test from GeneratorTest (1225 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1256 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   1.28 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratorTest.RunWithRateZero" end time: Jan 07 16:30 CST
+"GeneratorTest.RunWithRateZero" time elapsed: 00:00:01
+----------------------------------------------------------
+
+16/26 Testing: GeneratorTest.RunWithRateLargerThanZero
+16/26 Test: GeneratorTest.RunWithRateLargerThanZero
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=GeneratorTest.RunWithRateLargerThanZero" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"GeneratorTest.RunWithRateLargerThanZero" start time: Jan 07 16:30 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = GeneratorTest.RunWithRateLargerThanZero
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from GeneratorTest
+[ RUN      ] GeneratorTest.RunWithRateLargerThanZero
+Connect to server
+[       OK ] GeneratorTest.RunWithRateLargerThanZero (11235 ms)
+[----------] 1 test from GeneratorTest (11235 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (11236 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  11.26 sec
+----------------------------------------------------------
+Test Passed.
+"GeneratorTest.RunWithRateLargerThanZero" end time: Jan 07 16:31 CST
+"GeneratorTest.RunWithRateLargerThanZero" time elapsed: 00:00:11
+----------------------------------------------------------
+
+17/26 Testing: NormalizeTest.matchSize
+17/26 Test: NormalizeTest.matchSize
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=NormalizeTest.matchSize" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"NormalizeTest.matchSize" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = NormalizeTest.matchSize
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from NormalizeTest
+[ RUN      ] NormalizeTest.matchSize
+[       OK ] NormalizeTest.matchSize (0 ms)
+[----------] 1 test from NormalizeTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"NormalizeTest.matchSize" end time: Jan 07 16:31 CST
+"NormalizeTest.matchSize" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/26 Testing: NormalizeTest.sanityCheck
+18/26 Test: NormalizeTest.sanityCheck
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=NormalizeTest.sanityCheck" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"NormalizeTest.sanityCheck" start time: Jan 03 15:45 CST
+"NormalizeTest.sanityCheck" start time: Jan 07 16:31 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -78,15 +487,15 @@ Note: Google Test filter = NormalizeTest.sanityCheck
 Test time =   0.02 sec
 ----------------------------------------------------------
 Test Passed.
-"NormalizeTest.sanityCheck" end time: Jan 03 15:45 CST
+"NormalizeTest.sanityCheck" end time: Jan 07 16:31 CST
 "NormalizeTest.sanityCheck" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-20/20 Testing: NormalizeTest.decodeMsg
-20/20 Test: NormalizeTest.decodeMsg
+19/26 Testing: NormalizeTest.decodeMsg
+19/26 Test: NormalizeTest.decodeMsg
 Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=NormalizeTest.decodeMsg" "--gtest_also_run_disabled_tests"
 Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
-"NormalizeTest.decodeMsg" start time: Jan 03 15:45 CST
+"NormalizeTest.decodeMsg" start time: Jan 07 16:31 CST
 Output:
 ----------------------------------------------------------
 Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
@@ -105,8 +514,197 @@ Note: Google Test filter = NormalizeTest.decodeMsg
 Test time =   0.01 sec
 ----------------------------------------------------------
 Test Passed.
-"NormalizeTest.decodeMsg" end time: Jan 03 15:45 CST
+"NormalizeTest.decodeMsg" end time: Jan 07 16:31 CST
 "NormalizeTest.decodeMsg" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Jan 03 15:45 CST
+20/26 Testing: BlockedBoundedQueueTest.Init
+20/26 Test: BlockedBoundedQueueTest.Init
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.Init" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.Init" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.Init
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.Init
+[       OK ] BlockedBoundedQueueTest.Init (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.Init" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.Init" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/26 Testing: BlockedBoundedQueueTest.Add
+21/26 Test: BlockedBoundedQueueTest.Add
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.Add" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.Add" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.Add
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.Add
+[       OK ] BlockedBoundedQueueTest.Add (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.Add" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.Add" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/26 Testing: BlockedBoundedQueueTest.Delete
+22/26 Test: BlockedBoundedQueueTest.Delete
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.Delete" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.Delete" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.Delete
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.Delete
+[       OK ] BlockedBoundedQueueTest.Delete (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.Delete" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.Delete" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/26 Testing: BlockedBoundedQueueTest.Clear
+23/26 Test: BlockedBoundedQueueTest.Clear
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.Clear" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.Clear" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.Clear
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.Clear
+[       OK ] BlockedBoundedQueueTest.Clear (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.Clear" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.Clear" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/26 Testing: BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue
+24/26 Test: BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue
+[       OK ] BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.CloseSetsFlagAndRejectsEnqueue" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/26 Testing: BlockedBoundedQueueTest.CloseWakeDequeue
+25/26 Test: BlockedBoundedQueueTest.CloseWakeDequeue
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.CloseWakeDequeue" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.CloseWakeDequeue" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.CloseWakeDequeue
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.CloseWakeDequeue
+[       OK ] BlockedBoundedQueueTest.CloseWakeDequeue (12 ms)
+[----------] 1 test from BlockedBoundedQueueTest (12 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (12 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.CloseWakeDequeue" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.CloseWakeDequeue" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/26 Testing: BlockedBoundedQueueTest.ProducerBlock
+26/26 Test: BlockedBoundedQueueTest.ProducerBlock
+Command: "/Users/anminfang/Documents/md-engine-training/build/debug/tests/protocol_tests" "--gtest_filter=BlockedBoundedQueueTest.ProducerBlock" "--gtest_also_run_disabled_tests"
+Directory: /Users/anminfang/Documents/md-engine-training/build/debug/tests
+"BlockedBoundedQueueTest.ProducerBlock" start time: Jan 07 16:31 CST
+Output:
+----------------------------------------------------------
+Running main() from /Users/anminfang/Documents/md-engine-training/third_party/googletest/googletest/src/gtest_main.cc
+Note: Google Test filter = BlockedBoundedQueueTest.ProducerBlock
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BlockedBoundedQueueTest
+[ RUN      ] BlockedBoundedQueueTest.ProducerBlock
+[       OK ] BlockedBoundedQueueTest.ProducerBlock (0 ms)
+[----------] 1 test from BlockedBoundedQueueTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BlockedBoundedQueueTest.ProducerBlock" end time: Jan 07 16:31 CST
+"BlockedBoundedQueueTest.ProducerBlock" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 07 16:31 CST

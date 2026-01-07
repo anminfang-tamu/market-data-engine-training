@@ -110,7 +110,7 @@ namespace containers
     template <typename T>
     size_t BlockedBoundedQueue<T>::capacity() const
     {
-        return kCapacity;
+        return kCapacity - size_;
     }
 
     template <typename T>

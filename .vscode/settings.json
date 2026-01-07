@@ -2,7 +2,11 @@
   "editor.pasteAs.preferences": [
     
   ],
-  "editor.quickSuggestions": false,
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
+  },
   "editor.suggestOnTriggerCharacters": false,
   "editor.parameterHints.enabled": false,
   "editor.inlineSuggest.enabled": false

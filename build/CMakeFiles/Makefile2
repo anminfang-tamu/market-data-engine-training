@@ -312,12 +312,12 @@ tests/CMakeFiles/protocol_tests.dir/all: third_party/googletest/googletest/CMake
 tests/CMakeFiles/protocol_tests.dir/all: third_party/googletest/googletest/CMakeFiles/gtest_main.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=24,25,26,27,28,29 "Built target protocol_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/anminfang/Documents/md-engine-training/build/CMakeFiles --progress-num=24,25,26,27,28,29,30 "Built target protocol_tests"
 .PHONY : tests/CMakeFiles/protocol_tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/protocol_tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 21
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 22
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/protocol_tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/anminfang/Documents/md-engine-training/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/protocol_tests.dir/rule

@@ -185,6 +185,30 @@ protocol_tests/fast:
 	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/build
 .PHONY : protocol_tests/fast
 
+unit/test_blocked_bounded_queue.o: unit/test_blocked_bounded_queue.cpp.o
+.PHONY : unit/test_blocked_bounded_queue.o
+
+# target to build an object file
+unit/test_blocked_bounded_queue.cpp.o:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_blocked_bounded_queue.cpp.o
+.PHONY : unit/test_blocked_bounded_queue.cpp.o
+
+unit/test_blocked_bounded_queue.i: unit/test_blocked_bounded_queue.cpp.i
+.PHONY : unit/test_blocked_bounded_queue.i
+
+# target to preprocess a source file
+unit/test_blocked_bounded_queue.cpp.i:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_blocked_bounded_queue.cpp.i
+.PHONY : unit/test_blocked_bounded_queue.cpp.i
+
+unit/test_blocked_bounded_queue.s: unit/test_blocked_bounded_queue.cpp.s
+.PHONY : unit/test_blocked_bounded_queue.s
+
+# target to generate assembly for a file
+unit/test_blocked_bounded_queue.cpp.s:
+	cd /Users/anminfang/Documents/md-engine-training/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/protocol_tests.dir/build.make tests/CMakeFiles/protocol_tests.dir/unit/test_blocked_bounded_queue.cpp.s
+.PHONY : unit/test_blocked_bounded_queue.cpp.s
+
 unit/test_generator.o: unit/test_generator.cpp.o
 .PHONY : unit/test_generator.o
 
@@ -319,6 +343,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... protocol_tests"
+	@echo "... unit/test_blocked_bounded_queue.o"
+	@echo "... unit/test_blocked_bounded_queue.i"
+	@echo "... unit/test_blocked_bounded_queue.s"
 	@echo "... unit/test_generator.o"
 	@echo "... unit/test_generator.i"
 	@echo "... unit/test_generator.s"

@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/protocol_tests.dir/unit/test_blocked_bounded_queue.cpp.o"
+  "CMakeFiles/protocol_tests.dir/unit/test_blocked_bounded_queue.cpp.o.d"
   "CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o"
   "CMakeFiles/protocol_tests.dir/unit/test_generator.cpp.o.d"
   "CMakeFiles/protocol_tests.dir/unit/test_normalize.cpp.o"

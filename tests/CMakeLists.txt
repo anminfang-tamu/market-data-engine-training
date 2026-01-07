@@ -6,6 +6,7 @@ add_executable(protocol_tests
     unit/test_tcp_client_block.cpp
     unit/test_generator.cpp
     unit/test_normalize.cpp
+    unit/test_blocked_bounded_queue.cpp
 )
 target_link_libraries(protocol_tests
     GTest::gtest_main
