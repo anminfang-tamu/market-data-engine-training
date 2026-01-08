@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libengine_lib.a CMakeFiles/engine_lib.dir/engine/engine.cpp.o CMakeFiles/engine_lib.dir/engine/act/order_mock.cpp.o CMakeFiles/engine_lib.dir/engine/ingest/ingest.cpp.o CMakeFiles/engine_lib.dir/engine/normalize/normalize.cpp.o CMakeFiles/engine_lib.dir/engine/process/strategy_mock.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib libengine_lib.a

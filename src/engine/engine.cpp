@@ -108,7 +108,7 @@ namespace engine
             if (queue_.dequeue(msg))
             {
                 ++processed_;
-                if (processed_ % 1000 == 0)
+                if (processed_ % 100000 == 0)
                 {
                     std::cout << "Processed: " << processed_ << std::endl;
                     std::cout << "Received: " << received_ << std::endl;

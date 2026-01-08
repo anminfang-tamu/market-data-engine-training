@@ -1,5 +1,0 @@
-if(EXISTS "/Users/anminfang/Documents/md-engine-training/build/tests/protocol_tests[1]_tests.cmake")
-  include("/Users/anminfang/Documents/md-engine-training/build/tests/protocol_tests[1]_tests.cmake")
-else()
-  add_test(protocol_tests_NOT_BUILT protocol_tests_NOT_BUILT)
-endif()
