@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# build files
+build/
+evidence/
+*.log
+perf.data*
+core*
