@@ -31,6 +31,8 @@ namespace engine
 
         std::thread processor_;
 
+        std::thread reporter_;
+
         containers::BlockedBoundedQueue<protocol::MarketDataMsg> queue_;
 
         void on_message(const void *data, size_t len);

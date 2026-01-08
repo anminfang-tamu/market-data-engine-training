@@ -13,18 +13,13 @@ namespace engine
 {
     Engine::~Engine()
     {
-        running_ = false;
-        received_ = 0;
-        decoded_err_ = 0;
-        processed_ = 0;
-        drops_ = 0;
+        stop();
     }
 
     void Engine::on_message(const void *data, size_t len)
     {
         if (!engine::isSizeMatch(len))
         {
-            std::cout << "Message size is not matched!" << std::endl;
             ++drops_;
             return;
         }
@@ -32,21 +27,18 @@ namespace engine
         protocol::MarketDataMsg msg{};
         if (!engine::decode_msg(data, len, msg))
         {
-            std::cout << "Failed to decode incoming message!" << std::endl;
             ++decoded_err_;
             return;
         }
 
         if (!engine::sanityCheck(msg))
         {
-            std::cout << "Failed to pass sanity check!" << std::endl;
             ++drops_;
             return;
         }
 
         if (!queue_.enqueue(msg))
         {
-            std::cout << "Waiting to enqueue!" << std::endl;
             return;
         }
 
@@ -72,6 +64,12 @@ namespace engine
         while (running_)
         {
             int cfd = net::accept_one(listen_fd_);
+
+            if (!running_ || listen_fd_ < 0)
+            {
+                break;
+            }
+
             if (cfd < 0)
             {
                 continue;
@@ -110,6 +108,14 @@ namespace engine
             if (queue_.dequeue(msg))
             {
                 ++processed_;
+                if (processed_ % 1000 == 0)
+                {
+                    std::cout << "Processed: " << processed_ << std::endl;
+                    std::cout << "Received: " << received_ << std::endl;
+                    std::cout << "Decoded Error: " << decoded_err_ << std::endl;
+                    std::cout << "Dropped: " << drops_ << std::endl;
+                    std::cout << "Current Queue Size: " << queue_.size() << std::endl;
+                }
             }
             else if (queue_.closed())
             {
