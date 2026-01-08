@@ -89,7 +89,8 @@ namespace engine
         running_ = false;
         if (listen_fd_ >= 0)
         {
-            close(listen_fd_);
+            // close(listen_fd_); // might hang out seconds
+            shutdown(listen_fd_, SHUT_RDWR); // immediately shutdown
             listen_fd_ = -1;
         }
         queue_.close();

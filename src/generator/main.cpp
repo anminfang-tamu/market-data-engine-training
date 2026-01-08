@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::cout << "======== Generator ========" << std::endl;
+    std::cout << "<======== Generator ========>" << std::endl;
     generator::Generator gen;
     gen.connect("127.0.0.1", 8888);
 
@@ -28,5 +28,6 @@ int main()
     gen.run(burst_count, burst_rate, burst_seed);
     gen.run(normal_count, normal_rate, normal_seed);
 
+    std::cout << "<========== END ==========>" << std::endl;
     return 0;
 }
