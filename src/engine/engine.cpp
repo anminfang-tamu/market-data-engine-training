@@ -14,7 +14,10 @@ namespace engine
     Engine::~Engine()
     {
         running_ = false;
-        incoming_msg_count_ = 0;
+        received_ = 0;
+        decoded_err_ = 0;
+        processed_ = 0;
+        drops_ = 0;
     }
 
     void Engine::on_message(const void *data, size_t len)
@@ -22,7 +25,7 @@ namespace engine
         if (!engine::isSizeMatch(len))
         {
             std::cout << "Message size is not matched!" << std::endl;
-            ++invalid_msg_count_;
+            ++drops_;
             return;
         }
 
@@ -30,32 +33,31 @@ namespace engine
         if (!engine::decode_msg(data, len, msg))
         {
             std::cout << "Failed to decode incoming message!" << std::endl;
-            ++invalid_msg_count_;
+            ++decoded_err_;
             return;
         }
 
         if (!engine::sanityCheck(msg))
         {
             std::cout << "Failed to pass sanity check!" << std::endl;
-            ++invalid_msg_count_;
+            ++drops_;
             return;
         }
 
-        std::cout << "Receiving an new message" << std::endl;
-        std::cout << "Symbol: " << msg.symbol_id << std::endl;
-        std::cout << "Bid: " << msg.bid_price << std::endl;
-        std::cout << "Ask: " << msg.ask_price << std::endl;
-        std::cout << "Bid size: " << msg.bid_size << std::endl;
-        std::cout << "Ask size: " << msg.ask_size << std::endl;
+        if (!queue_.enqueue(msg))
+        {
+            std::cout << "Waiting to enqueue!" << std::endl;
+            return;
+        }
 
-        ++incoming_msg_count_;
+        ++received_;
     }
 
     bool Engine::run()
     {
         int port = 8888;
-        int fd = net::make_listen_socket(port);
-        if (fd < 0)
+        listen_fd_ = net::make_listen_socket(port);
+        if (listen_fd_ < 0)
         {
             std::cout << "It fails to activate server" << std::endl;
             return false;
@@ -64,9 +66,12 @@ namespace engine
 
         running_ = true;
 
+        processor_ = std::thread([this]
+                                 { process_loop(); });
+
         while (running_)
         {
-            int cfd = net::accept_one(fd);
+            int cfd = net::accept_one(listen_fd_);
             if (cfd < 0)
             {
                 continue;
@@ -79,5 +84,37 @@ namespace engine
         }
 
         return true;
+    }
+
+    bool Engine::stop()
+    {
+        running_ = false;
+        if (listen_fd_ >= 0)
+        {
+            close(listen_fd_);
+            listen_fd_ = -1;
+        }
+        queue_.close();
+        if (processor_.joinable())
+        {
+            processor_.join();
+        }
+        return true;
+    }
+
+    void Engine::process_loop()
+    {
+        protocol::MarketDataMsg msg{};
+        while (true)
+        {
+            if (queue_.dequeue(msg))
+            {
+                ++processed_;
+            }
+            else if (queue_.closed())
+            {
+                break;
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 #pragma once
 #include <cstdint>
 #include <functional>
+#include <thread>
 
 #include "protocol/md_message.hpp"
+#include "containers/blocked_bounded_queue.hpp"
 
 namespace engine
 {
@@ -15,10 +17,21 @@ namespace engine
         bool run();
         bool stop();
 
+        void process_loop();
+
     private:
         bool running_{false};
-        int64_t incoming_msg_count_{0};
-        int64_t invalid_msg_count_{0};
+
+        int listen_fd_{-1};
+
+        int64_t received_{0};
+        int64_t processed_{0};
+        int64_t decoded_err_{0};
+        int64_t drops_{0};
+
+        std::thread processor_;
+
+        containers::BlockedBoundedQueue<protocol::MarketDataMsg> queue_;
 
         void on_message(const void *data, size_t len);
     };
