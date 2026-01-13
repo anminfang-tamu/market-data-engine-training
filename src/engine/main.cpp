@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "engine/engine.hpp"
+#include "common/logging/logger.hpp"
 
 namespace
 {
@@ -18,7 +19,14 @@ namespace
 
 int main()
 {
-    std::cout << "<======== Engine ========>" << std::endl;
+    auto &logger = log::Logger::instance();
+    if (!logger.set_log_file("engine_app.log"))
+    {
+        LOG_ERROR("Failed to open engine_app.log for writing");
+        return 1;
+    }
+    logger.set_level(Level::DEBUG);
+    LOG_INFO("<======== Engine ========>");
 
     std::signal(SIGINT, handle_signal);
     std::signal(SIGTERM, handle_signal);
@@ -26,6 +34,8 @@ int main()
     engine::Engine engine;
     std::thread runner([&]()
                        { engine.run(); });
+
+    LOG_INFO("Engine Server is running on port: ", 8888);
 
     while (!stop_flag.load(std::memory_order_relaxed))
     {

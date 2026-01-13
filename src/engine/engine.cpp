@@ -3,6 +3,7 @@
 #include "protocol/md_message.hpp"
 #include "protocol/decode.hpp"
 #include "engine/normalize/normalize.hpp"
+#include "common/logging/logger.hpp"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -51,10 +52,10 @@ namespace engine
         listen_fd_ = net::make_listen_socket(port);
         if (listen_fd_ < 0)
         {
-            std::cout << "It fails to activate server" << std::endl;
+            LOG_ERROR("Failed to activate server on port ", port);
             return false;
         }
-        std::cout << "Listening on port: " << port << std::endl;
+        LOG_INFO("Listening on port: ", port);
 
         running_ = true;
 
@@ -111,11 +112,11 @@ namespace engine
                 ++processed_;
                 if (processed_ % 100000 == 0)
                 {
-                    std::cout << "Processed: " << processed_ << std::endl;
-                    std::cout << "Received: " << received_ << std::endl;
-                    std::cout << "Decoded Error: " << decoded_err_ << std::endl;
-                    std::cout << "Dropped: " << drops_ << std::endl;
-                    std::cout << "Current Queue Size: " << queue_.size() << std::endl;
+                    LOG_INFO("Processed=", processed_,
+                             " Received=", received_,
+                             " DecodedError=", decoded_err_,
+                             " Dropped=", drops_,
+                             " QueueSize=", queue_.size());
                 }
             }
             else if (queue_.closed())
