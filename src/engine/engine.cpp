@@ -5,6 +5,7 @@
 #include "engine/normalize/normalize.hpp"
 #include "common/logging/logger.hpp"
 
+#include <chrono>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -21,20 +22,20 @@ namespace engine
     {
         if (!engine::isSizeMatch(len))
         {
-            ++drops_;
+            m_.inc_drops();
             return;
         }
 
         protocol::MarketDataMsg msg{};
         if (!engine::decode_msg(data, len, msg))
         {
-            ++decoded_err_;
+            m_.inc_decode_error();
             return;
         }
 
         if (!engine::sanityCheck(msg))
         {
-            ++drops_;
+            m_.inc_drops();
             return;
         }
 
@@ -43,7 +44,7 @@ namespace engine
             return;
         }
 
-        ++received_;
+        m_.inc_received();
     }
 
     bool Engine::run()
@@ -61,6 +62,16 @@ namespace engine
 
         processor_ = std::thread([this]
                                  { process_loop(); });
+
+        reporter_ = std::thread([this]
+                                {
+            while (running_) 
+            {
+                auto snap = m_.snapshot();
+                LOG_INFO("Metrics ", m_.to_string(snap),
+                                                 " QueueSize=", queue_.size());
+                                        std::this_thread::sleep_for(std::chrono::seconds(5));
+            } });
 
         while (running_)
         {
@@ -109,15 +120,7 @@ namespace engine
         {
             if (queue_.dequeue(msg))
             {
-                ++processed_;
-                if (processed_ % 100000 == 0)
-                {
-                    LOG_INFO("Processed=", processed_,
-                             " Received=", received_,
-                             " DecodedError=", decoded_err_,
-                             " Dropped=", drops_,
-                             " QueueSize=", queue_.size());
-                }
+                m_.inc_processed();
             }
             else if (queue_.closed())
             {

@@ -5,6 +5,7 @@
 
 #include "protocol/md_message.hpp"
 #include "containers/blocked_bounded_queue.hpp"
+#include "common/metrics/metrics.hpp"
 
 namespace engine
 {
@@ -24,10 +25,7 @@ namespace engine
 
         int listen_fd_{-1};
 
-        int64_t received_{0};
-        int64_t processed_{0};
-        int64_t decoded_err_{0};
-        int64_t drops_{0};
+        metrics::Metrics m_;
 
         std::thread processor_;
 
