@@ -58,14 +58,14 @@ namespace engine
         }
         LOG_INFO("Listening on port: ", port);
 
-        running_ = true;
+        running_.store(true, std::memory_order_relaxed);
 
         processor_ = std::thread([this]
                                  { process_loop(); });
 
         reporter_ = std::thread([this]
                                 {
-            while (running_) 
+            while (running_.load(std::memory_order_relaxed)) 
             {
                 auto snap = m_.snapshot();
                 LOG_INFO("Metrics ", m_.to_string(snap),
@@ -73,11 +73,12 @@ namespace engine
                                         std::this_thread::sleep_for(std::chrono::seconds(5));
             } });
 
-        while (running_)
+        while (running_.load(std::memory_order_relaxed))
         {
             int cfd = net::accept_one(listen_fd_);
+            client_fd_.store(cfd, std::memory_order_relaxed);
 
-            if (!running_ || listen_fd_ < 0)
+            if (!running_.load(std::memory_order_relaxed) || listen_fd_ < 0)
             {
                 break;
             }
@@ -87,10 +88,15 @@ namespace engine
                 continue;
             }
 
+            // keep blocking sockets but add a timeout so stop() can tear down cleanly
+            net::set_recv_timeout(cfd, std::chrono::milliseconds(500));
+
             net::handle_client(cfd, protocol::kWireSize, [this](const void *data, size_t len)
-                               { on_message(data, len); });
+                               { on_message(data, len); }, [this]()
+                               { return !running_.load(std::memory_order_relaxed); });
 
             close(cfd);
+            client_fd_.store(-1, std::memory_order_relaxed);
         }
 
         return true;
@@ -98,17 +104,29 @@ namespace engine
 
     bool Engine::stop()
     {
-        running_ = false;
+        running_.store(false, std::memory_order_relaxed);
         if (listen_fd_ >= 0)
         {
-            // close(listen_fd_); // might hang out seconds
             shutdown(listen_fd_, SHUT_RDWR); // immediately shutdown
+            close(listen_fd_);               // might hang out seconds
             listen_fd_ = -1;
         }
+
+        int cfd = client_fd_.exchange(-1, std::memory_order_relaxed);
+        if (cfd >= 0)
+        {
+            shutdown(cfd, SHUT_RDWR);
+            close(cfd);
+        }
+
         queue_.close();
         if (processor_.joinable())
         {
             processor_.join();
+        }
+        if (reporter_.joinable())
+        {
+            reporter_.join();
         }
         return true;
     }

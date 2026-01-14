@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <functional>
 #include <thread>
+#include <atomic>
 
 #include "protocol/md_message.hpp"
 #include "containers/blocked_bounded_queue.hpp"
@@ -21,9 +22,10 @@ namespace engine
         void process_loop();
 
     private:
-        bool running_{false};
+        std::atomic<bool> running_{false};
 
         int listen_fd_{-1};
+        std::atomic<int> client_fd_{-1};
 
         metrics::Metrics m_;
 

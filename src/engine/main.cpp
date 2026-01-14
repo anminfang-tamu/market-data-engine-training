@@ -42,7 +42,11 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    engine.stop();
+    bool stopped = engine.stop();
+    if (stopped)
+    {
+        LOG_INFO("Engine stopped!!!");
+    }
     if (runner.joinable())
     {
         runner.join();

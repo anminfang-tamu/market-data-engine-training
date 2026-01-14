@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cerrno>
+#include <chrono>
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -55,12 +56,22 @@ namespace net
             cfd = accept(listen_fd, reinterpret_cast<sockaddr *>(&client), &len);
             if (cfd != -1)
                 break;
-            if (errno == EINTR)
-                continue;
+            if (errno == EINTR || errno == EBADF || errno == EINVAL)
+                return -1;
+
+            std::cout << "errno: " << EINTR << std::endl;
             die("accept");
         }
 
         return cfd;
+    }
+
+    inline bool set_recv_timeout(int fd, std::chrono::milliseconds timeout)
+    {
+        timeval tv{};
+        tv.tv_sec = static_cast<time_t>(timeout.count() / 1000);
+        tv.tv_usec = static_cast<suseconds_t>((timeout.count() % 1000) * 1000);
+        return setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) == 0;
     }
 
     inline ssize_t recv_exact(int cfd, void *buff, size_t len)
@@ -89,6 +100,42 @@ namespace net
         return static_cast<ssize_t>(total);
     }
 
+    template <typename ShouldStop>
+    inline ssize_t recv_exact_until(int cfd, void *buff, size_t len, ShouldStop should_stop)
+    {
+        size_t total = 0;
+        auto *p = static_cast<char *>(buff);
+
+        while (total < len)
+        {
+            if (should_stop())
+            {
+                return -2; // caller will treat as stop request
+            }
+
+            ssize_t n = recv(cfd, p + total, len - total, 0);
+            if (n > 0)
+            {
+                total += static_cast<size_t>(n);
+                continue;
+            }
+            if (n == 0)
+            {
+                return 0;
+            }
+            if (errno == EINTR)
+            {
+                continue;
+            }
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+            {
+                continue;
+            }
+            return -1;
+        }
+        return static_cast<ssize_t>(total);
+    }
+
     template <typename OnMessage>
     inline bool handle_client(int cfd, size_t msg_len, OnMessage on_message)
     {
@@ -105,6 +152,34 @@ namespace net
             if (n == 0)
             {
                 break;
+            }
+            if (n < 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    template <typename OnMessage, typename ShouldStop>
+    inline bool handle_client(int cfd, size_t msg_len, OnMessage on_message, ShouldStop should_stop)
+    {
+        char buff[4096]; // 4KB
+
+        if (msg_len == 0 || msg_len > sizeof(buff))
+            return false;
+
+        while (true)
+        {
+            ssize_t n = recv_exact_until(cfd, buff, msg_len, should_stop);
+            if (n > 0)
+                on_message(buff, static_cast<size_t>(n));
+            if (n == 0)
+            {
+                break;
+            }
+            if (n == -2)
+            {
+                return false; // stop requested
             }
             if (n < 0)
                 return false;
