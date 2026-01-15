@@ -34,7 +34,8 @@ pmap -x "${PID}" > "${OUT_DIR}/pmap.txt"
 ${SUDO} perf stat -e task-clock,context-switches,cpu-migrations,page-faults -p "${PID}" \
   sleep "${DURATION}" 2> "${OUT_DIR}/perf_stat.txt" || true
 
-${SUDO} strace -p "${PID}" -c -f -o "${OUT_DIR}/strace_c.txt" \
-  sleep "${DURATION}" || true
+# strace will block until detached; wrap with timeout so we always return.
+${SUDO} timeout -s INT "${DURATION}" \
+  strace -p "${PID}" -c -f -o "${OUT_DIR}/strace_c.txt" || true
 
 echo "evidence_dir=${OUT_DIR}"
