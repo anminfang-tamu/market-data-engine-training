@@ -46,3 +46,7 @@ evidence/
 *.log
 perf.data*
 core*
+
+# tooling cache / editor artifacts
+.cache/
+compile_commands.json
