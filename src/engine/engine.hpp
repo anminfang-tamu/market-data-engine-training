@@ -1,40 +1,36 @@
 #pragma once
-#include <cstdint>
-#include <functional>
-#include <thread>
 #include <atomic>
+#include <thread>
 
-#include "protocol/md_message.hpp"
-#include "containers/blocked_bounded_queue.hpp"
 #include "common/metrics/metrics.hpp"
+#include "containers/ring_buffer.hpp"
+#include "protocol/md_message.hpp"
 
-namespace engine
-{
-    class Engine
-    {
-    public:
-        Engine() = default;
-        ~Engine();
+namespace engine {
+class Engine {
+public:
+  Engine() = default;
+  ~Engine();
 
-        bool run();
-        bool stop();
+  bool run();
+  bool stop();
 
-        void process_loop();
+  void process_loop();
 
-    private:
-        std::atomic<bool> running_{false};
+private:
+  std::atomic<bool> running_{false};
 
-        int listen_fd_{-1};
-        std::atomic<int> client_fd_{-1};
+  int listen_fd_{-1};
+  std::atomic<int> client_fd_{-1};
 
-        metrics::Metrics m_;
+  metrics::Metrics m_;
 
-        std::thread processor_;
+  std::thread processor_;
 
-        std::thread reporter_;
+  std::thread reporter_;
 
-        containers::BlockedBoundedQueue<protocol::MarketDataMsg> queue_;
+  containers::RingBuffer<protocol::MarketDataMsg, 4096> queue_;
 
-        void on_message(const void *data, size_t len);
-    };
-}
+  void on_message(const void *data, size_t len);
+};
+} // namespace engine
