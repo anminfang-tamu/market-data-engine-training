@@ -3,19 +3,10 @@
 #include <csignal>
 #include <chrono>
 #include <thread>
+#include <pthread.h>
 
 #include "engine/engine.hpp"
 #include "common/logging/logger.hpp"
-
-namespace
-{
-    std::atomic<bool> stop_flag{false};
-
-    void handle_signal(int)
-    {
-        stop_flag.store(true, std::memory_order_relaxed);
-    }
-}
 
 int main()
 {
@@ -28,8 +19,12 @@ int main()
     logger.set_level(Level::DEBUG);
     LOG_INFO("<======== Engine ========>");
 
-    std::signal(SIGINT, handle_signal);
-    std::signal(SIGTERM, handle_signal);
+    // Block SIGINT/SIGTERM in this thread and wait on them explicitly.
+    sigset_t set;
+    sigemptyset(&set);
+    sigaddset(&set, SIGINT);
+    sigaddset(&set, SIGTERM);
+    pthread_sigmask(SIG_BLOCK, &set, nullptr);
 
     engine::Engine engine;
     std::thread runner([&]()
@@ -37,10 +32,9 @@ int main()
 
     LOG_INFO("Engine Server is running on port: ", 8888);
 
-    while (!stop_flag.load(std::memory_order_relaxed))
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
+    // Wait until a termination signal arrives.
+    int sig = 0;
+    sigwait(&set, &sig);
 
     bool stopped = engine.stop();
     if (stopped)
