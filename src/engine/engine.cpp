@@ -1,16 +1,15 @@
 #include "engine.hpp"
 #include "common/logging/logger.hpp"
-#include "common/net/tcp_server_block.hpp"
 #include "engine/normalize/normalize.hpp"
 #include "protocol/md_message.hpp"
 
 #include <arpa/inet.h>
-#include <chrono>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
 namespace engine {
+
 Engine::~Engine() { stop(); }
 
 void Engine::on_message(const void *data, size_t len) {
@@ -36,7 +35,7 @@ void Engine::on_message(const void *data, size_t len) {
 
   m_.inc_received();
 }
-
+/*
 bool Engine::run() {
   int port = 8888;
   listen_fd_ = net::make_listen_socket(port);
@@ -84,20 +83,34 @@ bool Engine::run() {
 
   return true;
 }
+  */
+
+bool Engine::run() {
+  int port = 8888;
+
+  running_.store(true, std::memory_order_relaxed);
+
+  if (!net::start_server(handle_, queue_, port)) {
+    running_.store(false, std::memory_order_relaxed);
+    return false;
+  }
+
+  processor_ = std::thread([this] { process_loop(); });
+
+  reporter_ = std::thread([this] {
+    while (running_.load(std::memory_order_relaxed)) {
+      auto snap = m_.snapshot();
+      LOG_INFO("Metrics ", m_.to_string(snap));
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+  });
+
+  return true;
+}
 
 bool Engine::stop() {
   running_.store(false, std::memory_order_relaxed);
-  if (listen_fd_ >= 0) {
-    shutdown(listen_fd_, SHUT_RDWR); // immediately shutdown
-    close(listen_fd_);               // might hang out seconds
-    listen_fd_ = -1;
-  }
-
-  int cfd = client_fd_.exchange(-1, std::memory_order_relaxed);
-  if (cfd >= 0) {
-    shutdown(cfd, SHUT_RDWR);
-    close(cfd);
-  }
+  net::stop_server(handle_);
 
   if (processor_.joinable()) {
     processor_.join();
@@ -107,6 +120,29 @@ bool Engine::stop() {
   }
   return true;
 }
+
+// bool Engine::stop() {
+//   running_.store(false, std::memory_order_relaxed);
+//   if (listen_fd_ >= 0) {
+//     shutdown(listen_fd_, SHUT_RDWR); // immediately shutdown
+//     close(listen_fd_);               // might hang out seconds
+//     listen_fd_ = -1;
+//   }
+
+//   int cfd = client_fd_.exchange(-1, std::memory_order_relaxed);
+//   if (cfd >= 0) {
+//     shutdown(cfd, SHUT_RDWR);
+//     close(cfd);
+//   }
+
+//   if (processor_.joinable()) {
+//     processor_.join();
+//   }
+//   if (reporter_.joinable()) {
+//     reporter_.join();
+//   }
+//   return true;
+// }
 
 void Engine::process_loop() {
   protocol::MarketDataMsg msg{};

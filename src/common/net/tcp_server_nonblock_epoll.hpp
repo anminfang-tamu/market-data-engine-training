@@ -310,7 +310,7 @@ inline void stop_server(ServerHandle &handle) {
 
   if (handle.wake_fd != -1) {
     uint64_t one = 1;
-    ::write(handle.wake_fd, &one, sizeof(one)); // wake epoll_wait
+    write(handle.wake_fd, &one, sizeof(one)); // wake epoll_wait
   }
 
   if (handle.io_thread.joinable())

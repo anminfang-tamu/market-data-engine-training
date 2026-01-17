@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "common/metrics/metrics.hpp"
+#include "common/net/tcp_server_nonblock_epoll.hpp"
 #include "containers/ring_buffer.hpp"
 #include "protocol/md_message.hpp"
 
@@ -28,6 +29,8 @@ private:
   std::thread processor_;
 
   std::thread reporter_;
+
+  net::ServerHandle handle_;
 
   containers::RingBuffer<protocol::MarketDataMsg, 4096> queue_;
 
