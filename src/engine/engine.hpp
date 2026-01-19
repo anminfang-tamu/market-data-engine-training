@@ -4,6 +4,7 @@
 
 #include "common/metrics/metrics.hpp"
 #include "common/net/tcp_server_nonblock_epoll.hpp"
+#include "containers/frame_pool.hpp"
 #include "containers/ring_buffer.hpp"
 #include "protocol/md_message.hpp"
 
@@ -26,14 +27,11 @@ private:
 
   metrics::Metrics m_;
 
-  std::thread processor_;
-
+  std::thread consumer_;
   std::thread reporter_;
 
   net::ServerHandle handle_;
 
-  containers::RingBuffer<protocol::MarketDataMsg, 4096> queue_;
-
-  void on_message(const void *data, size_t len);
+  containers::FramePool<4096> pool_;
 };
 } // namespace engine

@@ -12,11 +12,14 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <atomic>
+#include <cstdint>
 #include <thread>
 
-#include "containers/ring_buffer.hpp"
-#include "protocol/decode.hpp"
-#include "protocol/md_message.hpp"
+#include "common/metrics/metrics.hpp"
+#include "containers/frame_pool.hpp"
+
+// Only reassembles frames; no decode here.
 
 namespace net {
 
@@ -75,10 +78,11 @@ inline int make_listen_socket(int port) {
   return listen_fd;
 }
 
-// Reassemble fixed-size frames from a stream and push to queue.
-template <typename OnFrame>
+// Reassemble fixed-size frames from a stream and enqueue buffer indices.
+template <size_t Capacity>
 inline void consume_frames(ConnState &st, const uint8_t *data, size_t n,
-                           OnFrame on_frame) {
+                           containers::FramePool<Capacity> &pool,
+                           metrics::Metrics &metrics) {
   size_t off = 0;
   while (off < n) {
     const size_t need = protocol::kWireSize - st.have;
@@ -88,21 +92,23 @@ inline void consume_frames(ConnState &st, const uint8_t *data, size_t n,
     off += take;
 
     if (st.have == protocol::kWireSize) {
-      protocol::MarketDataMsg msg{};
-      if (protocol::decode(reinterpret_cast<const uint8_t *>(st.frame),
-                           protocol::kWireSize, msg)) {
-        on_frame(msg);
+      size_t idx = 0;
+      if (!pool.free.pop(idx)) {
+        metrics.inc_drops();
+        st.have = 0;
+        continue;
       }
+      std::memcpy(pool.slots[idx].data(), st.frame, protocol::kWireSize);
+      pool.ready.push(idx);
       st.have = 0;
     }
   }
 }
 
 template <size_t Capacity>
-inline void run_server_loop(
-    ServerHandle &handle,
-    containers::RingBuffer<protocol::MarketDataMsg, Capacity> &queue,
-    int port) {
+inline void run_server_loop(ServerHandle &handle,
+                            containers::FramePool<Capacity> &pool,
+                            metrics::Metrics &metrics, int port) {
   handle.listen_fd = make_listen_socket(port);
   if (handle.listen_fd == -1) {
     handle.running.store(false, std::memory_order_relaxed);
@@ -247,10 +253,8 @@ inline void run_server_loop(
         ssize_t n = ::recv(fd, io_buf, sizeof(io_buf), 0);
         if (n > 0) {
           if (fd >= 0 && fd < MAX_FD && conns[fd].fd == fd) {
-            consume_frames(conns[fd], io_buf, static_cast<size_t>(n),
-                           [&](const protocol::MarketDataMsg &msg) {
-                             (void)queue.push(msg); // drop if full
-                           });
+            consume_frames<Capacity>(conns[fd], io_buf, static_cast<size_t>(n),
+                                     pool, metrics);
           }
           continue;
         }
@@ -290,16 +294,17 @@ inline void run_server_loop(
 
 // Start server in background thread
 template <size_t Capacity>
-inline bool
-start_server(ServerHandle &handle,
-             containers::RingBuffer<protocol::MarketDataMsg, Capacity> &queue,
-             int port) {
+inline bool start_server(ServerHandle &handle,
+                         containers::FramePool<Capacity> &pool,
+                         metrics::Metrics &metrics, int port) {
   if (handle.running.load(std::memory_order_relaxed))
     return false;
   handle.running.store(true, std::memory_order_relaxed);
 
   handle.io_thread = std::thread(
-      [&handle, &queue, port] { run_server_loop(handle, queue, port); });
+      [&handle, &pool, &metrics, port] {
+        run_server_loop<Capacity>(handle, pool, metrics, port);
+      });
   return true;
 }
 

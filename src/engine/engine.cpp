@@ -3,38 +3,10 @@
 #include "engine/normalize/normalize.hpp"
 #include "protocol/md_message.hpp"
 
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 namespace engine {
 
 Engine::~Engine() { stop(); }
 
-void Engine::on_message(const void *data, size_t len) {
-  if (!engine::isSizeMatch(len)) {
-    m_.inc_drops();
-    return;
-  }
-
-  protocol::MarketDataMsg msg{};
-  if (!engine::decode_msg(data, len, msg)) {
-    m_.inc_decode_error();
-    return;
-  }
-
-  if (!engine::sanityCheck(msg)) {
-    m_.inc_drops();
-    return;
-  }
-
-  if (!queue_.push(msg)) {
-    return;
-  }
-
-  m_.inc_received();
-}
 /*
 bool Engine::run() {
   int port = 8888;
@@ -90,12 +62,14 @@ bool Engine::run() {
 
   running_.store(true, std::memory_order_relaxed);
 
-  if (!net::start_server(handle_, queue_, port)) {
+  pool_.init();
+
+  if (!net::start_server(handle_, pool_, m_, port)) {
     running_.store(false, std::memory_order_relaxed);
     return false;
   }
 
-  processor_ = std::thread([this] { process_loop(); });
+  consumer_ = std::thread([this] { process_loop(); });
 
   reporter_ = std::thread([this] {
     while (running_.load(std::memory_order_relaxed)) {
@@ -112,8 +86,8 @@ bool Engine::stop() {
   running_.store(false, std::memory_order_relaxed);
   net::stop_server(handle_);
 
-  if (processor_.joinable()) {
-    processor_.join();
+  if (consumer_.joinable()) {
+    consumer_.join();
   }
   if (reporter_.joinable()) {
     reporter_.join();
@@ -146,13 +120,19 @@ bool Engine::stop() {
 
 void Engine::process_loop() {
   protocol::MarketDataMsg msg{};
-  while (running_.load(std::memory_order_relaxed) || !queue_.empty()) {
-    if (queue_.pop(msg)) {
-      m_.inc_processed();
-      continue;
+  while (running_.load(std::memory_order_relaxed) || !pool_.ready.empty()) {
+    size_t idx = 0;
+    if (pool_.ready.pop(idx)) {
+      if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize, msg)) {
+        m_.inc_processed();
+      } else {
+        m_.inc_decode_error();
+      }
+      pool_.free.push(idx);
+    } else {
+      // queue is empty but engine still running; yield briefly
+      std::this_thread::yield();
     }
-    // queue is empty but engine still running; yield briefly
-    std::this_thread::yield();
   }
 }
 } // namespace engine
