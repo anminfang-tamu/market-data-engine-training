@@ -1,13 +1,10 @@
 #pragma once
 #include <atomic>
-#include <condition_variable>
-#include <mutex>
 #include <thread>
 
 #include "common/metrics/metrics.hpp"
 #include "common/net/tcp_server_nonblock_epoll.hpp"
 #include "containers/frame_pool.hpp"
-#include "protocol/md_message.hpp"
 
 namespace engine {
 class Engine {
@@ -23,19 +20,16 @@ public:
 private:
   std::atomic<bool> running_{false};
 
-  int listen_fd_{-1};
-  std::atomic<int> client_fd_{-1};
-
   metrics::Metrics m_;
-
-  std::mutex mtx_;
-  std::condition_variable cv_;
-
   std::thread consumer_;
   std::thread reporter_;
 
   net::ServerHandle handle_;
 
   containers::FramePool<4096> pool_;
+
+  int io_cpu_{1};
+  int process_cpu_{2};
+  int metrics_cpu_{3};
 };
 } // namespace engine

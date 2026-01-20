@@ -17,6 +17,7 @@
 #include <thread>
 
 #include "common/metrics/metrics.hpp"
+#include "common/thread/affinity.hpp"
 #include "containers/frame_pool.hpp"
 
 // Only reassembles frames; no decode here.
@@ -296,13 +297,17 @@ inline void run_server_loop(ServerHandle &handle,
 template <size_t Capacity>
 inline bool start_server(ServerHandle &handle,
                          containers::FramePool<Capacity> &pool,
-                         metrics::Metrics &metrics, int port) {
+                         metrics::Metrics &metrics, int port,
+                         int cpu_id = -1) {
   if (handle.running.load(std::memory_order_relaxed))
     return false;
   handle.running.store(true, std::memory_order_relaxed);
 
   handle.io_thread = std::thread(
-      [&handle, &pool, &metrics, port] {
+      [&handle, &pool, &metrics, port, cpu_id] {
+        if (cpu_id >= 0) {
+          common::thread::pin_current_thread(cpu_id);
+        }
         run_server_loop<Capacity>(handle, pool, metrics, port);
       });
   return true;

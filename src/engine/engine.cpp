@@ -1,9 +1,18 @@
 #include "engine.hpp"
 #include "common/logging/logger.hpp"
-#include "engine/normalize/normalize.hpp"
+#include "common/thread/affinity.hpp"
+#include "protocol/decode.hpp"
 #include "protocol/md_message.hpp"
 
+#include <chrono>
+#include <immintrin.h>
+#include <thread>
+
 namespace engine {
+
+namespace {
+inline void spin_pause() { _mm_pause(); }
+} // namespace
 
 Engine::~Engine() { stop(); }
 
@@ -14,18 +23,21 @@ bool Engine::run() {
 
   pool_.init();
 
-  if (!net::start_server(handle_, pool_, m_, port)) {
+  if (!net::start_server(handle_, pool_, m_, port, io_cpu_)) {
     running_.store(false, std::memory_order_relaxed);
     return false;
   }
 
-  consumer_ = std::thread([this] { process_loop(); });
+  consumer_ = std::thread([this] {
+    common::thread::pin_current_thread(process_cpu_);
+    process_loop();
+  });
 
   reporter_ = std::thread([this] {
-    std::unique_lock<std::mutex> lock(mtx_);
+    common::thread::pin_current_thread(metrics_cpu_);
     while (running_.load(std::memory_order_relaxed)) {
-      cv_.wait_for(lock, std::chrono::seconds(5));
-      if (running_.load(std::memory_order_relaxed) == false)
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+      if (!running_.load(std::memory_order_relaxed))
         break;
       auto snap = m_.snapshot();
       LOG_INFO("Metrics ", m_.to_string(snap));
@@ -60,8 +72,7 @@ void Engine::process_loop() {
       }
       pool_.free.push(idx);
     } else {
-      // queue is empty but engine still running; yield briefly
-      std::this_thread::yield();
+      spin_pause();
     }
   }
 }
