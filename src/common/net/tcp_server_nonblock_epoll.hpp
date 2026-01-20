@@ -105,7 +105,10 @@ inline void consume_frames(ConnState &st, const uint8_t *data, size_t n,
         continue;
       }
       std::memcpy(pool.slots[idx].data(), st.frame, protocol::kWireSize);
-      pool.ready.push(idx);
+      if (!pool.ready.push(idx)) {
+        metrics.inc_drops();
+        pool.free.push(idx);
+      }
       st.have = 0;
     }
   }
