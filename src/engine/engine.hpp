@@ -27,6 +27,9 @@ private:
 
   metrics::Metrics m_;
 
+  std::mutex mtx_;
+  std::condition_variable cv_;
+
   std::thread consumer_;
   std::thread reporter_;
 
