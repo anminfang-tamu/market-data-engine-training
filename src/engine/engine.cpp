@@ -4,9 +4,12 @@
 #include "protocol/decode.hpp"
 #include "protocol/md_message.hpp"
 
+#include <cerrno>
 #include <chrono>
 #include <immintrin.h>
+#include <sys/timerfd.h>
 #include <thread>
+#include <unistd.h>
 
 namespace engine {
 
@@ -35,13 +38,42 @@ bool Engine::run() {
 
   reporter_ = std::thread([this] {
     common::thread::pin_current_thread(metrics_cpu_);
-    while (running_.load(std::memory_order_relaxed)) {
-      std::this_thread::sleep_for(std::chrono::seconds(5));
-      if (!running_.load(std::memory_order_relaxed))
-        break;
-      auto snap = m_.snapshot();
-      LOG_INFO("Metrics ", m_.to_string(snap));
+    const int tfd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+    if (tfd == -1) {
+      while (running_.load(std::memory_order_relaxed)) {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        if (!running_.load(std::memory_order_relaxed))
+          break;
+        auto snap = m_.snapshot();
+        LOG_INFO("Metrics ", m_.to_string(snap));
+      }
+      return;
     }
+
+    itimerspec its{};
+    its.it_value.tv_sec = 5;
+    its.it_interval.tv_sec = 5;
+    timerfd_settime(tfd, 0, &its, nullptr);
+
+    uint64_t expirations = 0;
+    while (running_.load(std::memory_order_relaxed)) {
+      const ssize_t n = ::read(tfd, &expirations, sizeof(expirations));
+      if (n == sizeof(expirations)) {
+        if (!running_.load(std::memory_order_relaxed))
+          break;
+        auto snap = m_.snapshot();
+        LOG_INFO("Metrics ", m_.to_string(snap));
+      } else {
+        if (errno == EINTR)
+          continue;
+        if (errno == EAGAIN) {
+          std::this_thread::sleep_for(std::chrono::milliseconds(1));
+          continue;
+        }
+        break;
+      }
+    }
+    close(tfd);
   });
 
   return true;

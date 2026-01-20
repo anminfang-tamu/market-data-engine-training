@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+
 #include <arpa/inet.h>
 #include <cerrno>
 #include <csignal>
@@ -10,6 +14,7 @@
 #include <sys/epoll.h>
 #include <sys/eventfd.h>
 #include <sys/socket.h>
+#include <sys/uio.h>
 #include <unistd.h>
 
 #include <atomic>
@@ -187,7 +192,30 @@ inline void run_server_loop(ServerHandle &handle,
 
   constexpr int MAXEV = 64;
   epoll_event events[MAXEV];
-  uint8_t io_buf[64 * 1024];
+  constexpr int BATCH = 16;
+  constexpr size_t BUF_SIZE = 4096;
+  alignas(64) mmsghdr msgs[BATCH];
+  alignas(64) iovec iov[BATCH];
+  alignas(64) uint8_t io_buf[BATCH][BUF_SIZE];
+
+  auto init_batch = [&] {
+    for (int i = 0; i < BATCH; ++i) {
+      std::memset(&msgs[i], 0, sizeof(mmsghdr));
+      std::memset(&iov[i], 0, sizeof(iovec));
+      iov[i].iov_base = io_buf[i];
+      iov[i].iov_len = BUF_SIZE;
+      msgs[i].msg_hdr.msg_iov = &iov[i];
+      msgs[i].msg_hdr.msg_iovlen = 1;
+      msgs[i].msg_hdr.msg_name = nullptr;
+      msgs[i].msg_hdr.msg_namelen = 0;
+      msgs[i].msg_hdr.msg_control = nullptr;
+      msgs[i].msg_hdr.msg_controllen = 0;
+      msgs[i].msg_hdr.msg_flags = 0;
+      msgs[i].msg_len = 0;
+    }
+  };
+
+  init_batch();
 
   while (handle.running.load(std::memory_order_relaxed)) {
     int nfd = epoll_wait(handle.epfd, events, MAXEV, 500);
@@ -249,19 +277,24 @@ inline void run_server_loop(ServerHandle &handle,
         continue;
       }
 
-      // recv loop: drain until EAGAIN
+      // recv loop: batch with recvmmsg, drain until EAGAIN
       for (;;) {
-        ssize_t n = ::recv(fd, io_buf, sizeof(io_buf), 0);
+        int n = recvmmsg(fd, msgs, BATCH, MSG_DONTWAIT, nullptr);
         if (n > 0) {
-          if (fd >= 0 && fd < MAX_FD && conns[fd].fd == fd) {
-            consume_frames<Capacity>(conns[fd], io_buf, static_cast<size_t>(n),
-                                     pool, metrics);
+          for (int j = 0; j < n; ++j) {
+            const size_t len = msgs[j].msg_len;
+            if (len > 0 && fd >= 0 && fd < MAX_FD && conns[fd].fd == fd) {
+              consume_frames<Capacity>(conns[fd], io_buf[j], len, pool,
+                                       metrics);
+            }
+            msgs[j].msg_hdr.msg_flags = 0;
+            msgs[j].msg_len = 0;
           }
           continue;
         }
 
         if (n == 0) {
-          ::close(fd);
+          close(fd);
           reset_conn(fd);
           break;
         }
@@ -271,7 +304,7 @@ inline void run_server_loop(ServerHandle &handle,
         if (errno == EINTR)
           continue;
 
-        perror("recv");
+        perror("recvmmsg");
         close(fd);
         reset_conn(fd);
         break;
@@ -297,19 +330,17 @@ inline void run_server_loop(ServerHandle &handle,
 template <size_t Capacity>
 inline bool start_server(ServerHandle &handle,
                          containers::FramePool<Capacity> &pool,
-                         metrics::Metrics &metrics, int port,
-                         int cpu_id = -1) {
+                         metrics::Metrics &metrics, int port, int cpu_id = -1) {
   if (handle.running.load(std::memory_order_relaxed))
     return false;
   handle.running.store(true, std::memory_order_relaxed);
 
-  handle.io_thread = std::thread(
-      [&handle, &pool, &metrics, port, cpu_id] {
-        if (cpu_id >= 0) {
-          common::thread::pin_current_thread(cpu_id);
-        }
-        run_server_loop<Capacity>(handle, pool, metrics, port);
-      });
+  handle.io_thread = std::thread([&handle, &pool, &metrics, port, cpu_id] {
+    if (cpu_id >= 0) {
+      common::thread::pin_current_thread(cpu_id);
+    }
+    run_server_loop<Capacity>(handle, pool, metrics, port);
+  });
   return true;
 }
 
