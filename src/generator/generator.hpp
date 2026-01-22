@@ -13,9 +13,10 @@ namespace generator
 
         bool connect(const char *addr, uint16_t port);
         bool send(const protocol::MarketDataMsg &msg);
-        bool run(int count, int rate, int seed);
+        bool run(int count, int rate, int seed, int gap_mod = 0, int gap_span = 1);
 
     private:
+        uint32_t next_rand();
         protocol::MarketDataMsg make_message();
 
         int socket_fd{-1};

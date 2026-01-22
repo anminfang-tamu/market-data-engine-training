@@ -7,7 +7,9 @@
 
 namespace protocol
 {
-    constexpr std::size_t kWireSize = 36;
+    // Wire size is explicit to avoid struct padding differences:
+    // seq_num(8) + symbol_id(4) + exchange_ts(8) + bid/ask(8+8) + sizes(4+4) = 44.
+    constexpr std::size_t kWireSize = 44;
 
 // make sure match hardware arch
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
@@ -21,6 +23,13 @@ namespace protocol
     inline uint32_t be32_to_host(uint32_t v) { return v; }
     inline uint64_t be64_to_host(uint64_t v) { return v; }
 #endif
+
+    inline void write_u64(std::array<uint8_t, kWireSize> &buff, std::size_t &off, uint64_t v)
+    {
+        uint64_t be = host_to_be64(v);
+        std::memcpy(buff.data() + off, &be, sizeof(be));
+        off += sizeof(be);
+    }
 
     // network strict size on uint8_t -> 8 bits
     inline void write_u32(std::array<uint8_t, kWireSize> &buff, std::size_t &off, uint32_t v)
@@ -45,6 +54,7 @@ namespace protocol
         std::array<uint8_t, kWireSize> out;
         std::size_t off = 0;
 
+        write_u64(out, off, msg.seq_num);
         write_u32(out, off, msg.symbol_id);
         write_i64(out, off, msg.exchange_ts);
         write_i64(out, off, msg.bid_price);
