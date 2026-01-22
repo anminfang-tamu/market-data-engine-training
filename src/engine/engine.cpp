@@ -1,6 +1,7 @@
 #include "engine.hpp"
 #include "common/logging/logger.hpp"
 #include "common/thread/affinity.hpp"
+#include "engine/normalize/normalize.hpp"
 #include "protocol/decode.hpp"
 #include "protocol/md_message.hpp"
 
@@ -93,7 +94,12 @@ void Engine::process_loop() {
     size_t idx = 0;
     if (pool_.ready.pop(idx)) {
       if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize, msg)) {
-        m_.inc_processed();
+        if (hasGap(expected_seq_num_, msg.seq_num)) {
+
+        } else {
+          m_.inc_processed();
+        }
+
       } else {
         m_.inc_decode_error();
       }

@@ -20,6 +20,8 @@ public:
 private:
   std::atomic<bool> running_{false};
 
+  uint64_t expected_seq_num_{0};
+
   metrics::Metrics m_;
   std::thread consumer_;
   std::thread reporter_;
