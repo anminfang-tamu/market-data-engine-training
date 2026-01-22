@@ -4,11 +4,12 @@
 #include <gtest/gtest.h>
 
 TEST(Protocol, RoundTrip) {
-  protocol::MarketDataMsg from{1, 123, 100, 101, 10, 12};
+  protocol::MarketDataMsg from{1, 123, 100, 101, 10, 12, 14};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
   ASSERT_TRUE(protocol::decode(bytes.data(), bytes.size(), to));
+  EXPECT_EQ(to.seq_num, from.seq_num);
   EXPECT_EQ(to.symbol_id, from.symbol_id);
   EXPECT_EQ(to.exchange_ts, from.exchange_ts);
   EXPECT_EQ(to.bid_price, from.bid_price);
@@ -18,11 +19,12 @@ TEST(Protocol, RoundTrip) {
 }
 
 TEST(Protocol, RoundTripWithMsgZero) {
-  protocol::MarketDataMsg from{0, 0, 0, 0, 0, 0};
+  protocol::MarketDataMsg from{0, 0, 0, 0, 0, 0, 0};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
   ASSERT_TRUE(protocol::decode(bytes.data(), bytes.size(), to));
+  EXPECT_EQ(to.seq_num, from.seq_num);
   EXPECT_EQ(to.symbol_id, from.symbol_id);
   EXPECT_EQ(to.exchange_ts, from.exchange_ts);
   EXPECT_EQ(to.bid_price, from.bid_price);
@@ -32,12 +34,18 @@ TEST(Protocol, RoundTripWithMsgZero) {
 }
 
 TEST(Protocol, RoundTripWithMsgMax) {
-  protocol::MarketDataMsg from{UINT64_MAX, INT64_MAX, INT64_MAX,
-                               INT64_MAX,  INT32_MAX, INT32_MAX};
+  protocol::MarketDataMsg from{UINT64_MAX,
+                               UINT32_MAX,
+                               INT64_MAX,
+                               INT64_MAX,
+                               INT64_MAX,
+                               INT32_MAX,
+                               INT32_MAX};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
   ASSERT_TRUE(protocol::decode(bytes.data(), bytes.size(), to));
+  EXPECT_EQ(to.seq_num, from.seq_num);
   EXPECT_EQ(to.symbol_id, from.symbol_id);
   EXPECT_EQ(to.exchange_ts, from.exchange_ts);
   EXPECT_EQ(to.bid_price, from.bid_price);
@@ -47,12 +55,18 @@ TEST(Protocol, RoundTripWithMsgMax) {
 }
 
 TEST(Protocol, RoundTripWithMsgMin) {
-  protocol::MarketDataMsg from{UINT64_MAX, INT64_MIN, INT64_MIN,
-                               INT64_MIN,  INT32_MAX, INT32_MAX};
+  protocol::MarketDataMsg from{0,
+                               0,
+                               INT64_MIN,
+                               INT64_MIN,
+                               INT64_MAX,
+                               INT32_MIN,
+                               INT32_MIN};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
   ASSERT_TRUE(protocol::decode(bytes.data(), bytes.size(), to));
+  EXPECT_EQ(to.seq_num, from.seq_num);
   EXPECT_EQ(to.symbol_id, from.symbol_id);
   EXPECT_EQ(to.exchange_ts, from.exchange_ts);
   EXPECT_EQ(to.bid_price, from.bid_price);
@@ -62,12 +76,18 @@ TEST(Protocol, RoundTripWithMsgMin) {
 }
 
 TEST(Protocol, RoundTripWithMsgNegative) {
-  protocol::MarketDataMsg from{UINT64_MAX, INT64_MIN, -1,
-                               1,          INT32_MAX, INT32_MAX};
+  protocol::MarketDataMsg from{42,
+                               1,
+                               -1,
+                               -10,
+                               1,
+                               INT32_MAX,
+                               INT32_MAX};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
   ASSERT_TRUE(protocol::decode(bytes.data(), bytes.size(), to));
+  EXPECT_EQ(to.seq_num, from.seq_num);
   EXPECT_EQ(to.symbol_id, from.symbol_id);
   EXPECT_EQ(to.exchange_ts, from.exchange_ts);
   EXPECT_EQ(to.bid_price, from.bid_price);
@@ -77,8 +97,8 @@ TEST(Protocol, RoundTripWithMsgNegative) {
 }
 
 TEST(Protocol, RoundTripWithTwiceDuplicateMsg) {
-  protocol::MarketDataMsg from1{1, 123, 100, 101, 10, 12};
-  protocol::MarketDataMsg from2{1, 123, 100, 101, 10, 12};
+  protocol::MarketDataMsg from1{1, 123, 100, 101, 10, 12, 14};
+  protocol::MarketDataMsg from2{1, 123, 100, 101, 10, 12, 14};
 
   auto bytes1 = protocol::encode(from1);
   auto bytes2 = protocol::encode(from2);
@@ -87,7 +107,7 @@ TEST(Protocol, RoundTripWithTwiceDuplicateMsg) {
 }
 
 TEST(Protocol, ByteCorrupt) {
-  protocol::MarketDataMsg from{1, 123, 100, 101, 10, 12};
+  protocol::MarketDataMsg from{5, 123, 100, 101, 10, 12, 14};
   auto bytes = protocol::encode(from);
   auto bytes_corrupted = bytes;
 
@@ -95,7 +115,8 @@ TEST(Protocol, ByteCorrupt) {
 
   auto equal_msg = [](const protocol::MarketDataMsg &a,
                       const protocol::MarketDataMsg &b) {
-    return a.symbol_id == b.symbol_id && a.bid_price == b.bid_price &&
+    return a.seq_num == b.seq_num && a.symbol_id == b.symbol_id &&
+           a.bid_price == b.bid_price &&
            a.ask_price == b.ask_price && a.bid_size == b.bid_size &&
            a.ask_size == b.ask_size;
   };
@@ -107,7 +128,7 @@ TEST(Protocol, ByteCorrupt) {
 }
 
 TEST(Protocol, DecodeSizeNotMatch) {
-  protocol::MarketDataMsg from{1, 123, 100, 101, 10, 12};
+  protocol::MarketDataMsg from{1, 123, 100, 101, 10, 12, 14};
   auto bytes = protocol::encode(from);
 
   protocol::MarketDataMsg to{};
