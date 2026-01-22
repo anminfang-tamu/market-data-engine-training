@@ -32,8 +32,10 @@ int main()
     const int duration_s = 600; // 10 minutes
     const int count = rate * duration_s;
     const int seed = 42;
+    const int gap_mod = 1000; // inject a gap when rand % gap_mod < gap_span
+    const int gap_span = 1;   // skip this many seq numbers when triggered
 
-    gen.run(count, rate, seed);
+    gen.run(count, rate, seed, gap_mod, gap_span);
 
     // burst + normal
     // const int burst_count = 100'000;

@@ -21,6 +21,7 @@ private:
   std::atomic<bool> running_{false};
 
   uint64_t expected_seq_num_{0};
+  bool seq_initialized_{false};
 
   metrics::Metrics m_;
   std::thread consumer_;

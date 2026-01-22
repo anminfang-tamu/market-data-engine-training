@@ -15,8 +15,4 @@ bool decode_msg(const void *data, size_t len, protocol::MarketDataMsg &out) {
 
   return true;
 }
-
-bool hasGap(size_t expected_seq_num, size_t incoming_seq_num) {
-  return expected_seq_num != incoming_seq_num;
-}
 } // namespace engine

@@ -37,7 +37,7 @@ std::string Metrics::to_string(const Snapshot &s) const {
   std::ostringstream oss;
   oss << "processed=" << s.processed << " received=" << s.received
       << " decode_errors=" << s.decode_errors << " drops=" << s.drops
-      << " sequence number  gaps=" << s.seq_num_gaps;
+      << " seq_gaps=" << s.seq_num_gaps;
   return oss.str();
 }
 } // namespace metrics

@@ -94,12 +94,23 @@ void Engine::process_loop() {
     size_t idx = 0;
     if (pool_.ready.pop(idx)) {
       if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize, msg)) {
-        if (hasGap(expected_seq_num_, msg.seq_num)) {
-          m_.inc_seq_num_gaps();
-          expected_seq_num_ = msg.seq_num;
-        } else {
+        m_.inc_received();
+
+        if (!seq_initialized_) {
+          expected_seq_num_ = msg.seq_num + 1;
+          seq_initialized_ = true;
           m_.inc_processed();
+        } else if (msg.seq_num == expected_seq_num_) {
           ++expected_seq_num_;
+          m_.inc_processed();
+        } else if (msg.seq_num > expected_seq_num_) {
+          const uint64_t gap = msg.seq_num - expected_seq_num_;
+          m_.inc_seq_num_gaps(gap);
+          expected_seq_num_ = msg.seq_num + 1;
+          m_.inc_processed();
+        } else {
+          // old/duplicate/out-of-order; drop for now
+          m_.inc_drops();
         }
 
       } else {
