@@ -71,15 +71,16 @@ namespace generator
         {
             for (int i = 0; i < count; i++)
             {
-                if (inject_gap)
+            if (inject_gap)
+            {
+                uint32_t r = next_rand();
+                if ((r % gap_mod) < static_cast<uint32_t>(gap_span))
                 {
-                    uint32_t r = next_rand();
-                    if ((r % gap_mod) < static_cast<uint32_t>(gap_span))
-                    {
-                        seq_ += static_cast<uint64_t>(gap_span);
-                        continue; // skip these seq numbers
-                    }
+                    // Skip gap_span sequence numbers, so jump past them before sending next.
+                    seq_ += static_cast<uint64_t>(gap_span) + 1;
+                    continue; // skip these seq numbers
                 }
+            }
 
                 auto msg = make_message();
                 if (!send(msg))
@@ -101,7 +102,8 @@ namespace generator
                 uint32_t r = next_rand();
                 if ((r % gap_mod) < static_cast<uint32_t>(gap_span))
                 {
-                    seq_ += static_cast<uint64_t>(gap_span);
+                    // Skip gap_span sequence numbers; jump ahead so the next sent seq reflects the gap.
+                    seq_ += static_cast<uint64_t>(gap_span) + 1;
                     next += interval;
                     std::this_thread::sleep_until(next);
                     continue; // gap
