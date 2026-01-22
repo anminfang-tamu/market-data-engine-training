@@ -95,9 +95,11 @@ void Engine::process_loop() {
     if (pool_.ready.pop(idx)) {
       if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize, msg)) {
         if (hasGap(expected_seq_num_, msg.seq_num)) {
-
+          m_.inc_seq_num_gaps();
+          expected_seq_num_ = msg.seq_num;
         } else {
           m_.inc_processed();
+          ++expected_seq_num_;
         }
 
       } else {
