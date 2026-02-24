@@ -22,12 +22,13 @@ Engine::~Engine() { stop(); }
 
 bool Engine::run() {
   int port = 8888;
+  const char *bind_ip = "127.0.0.1";
 
   running_.store(true, std::memory_order_relaxed);
 
   pool_.init();
 
-  if (!net::start_server(handle_, pool_, m_, port, io_cpu_)) {
+  if (!net::udp::start_server(handle_, pool_, m_, port, io_cpu_, bind_ip)) {
     running_.store(false, std::memory_order_relaxed);
     return false;
   }
@@ -77,7 +78,7 @@ bool Engine::run() {
 
 bool Engine::stop() {
   running_.store(false, std::memory_order_relaxed);
-  net::stop_server(handle_);
+  net::udp::stop_server(handle_);
 
   if (consumer_.joinable()) {
     consumer_.join();

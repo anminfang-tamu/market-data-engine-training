@@ -19,11 +19,11 @@ int main()
 
     if (connected)
     {
-        LOG_INFO("Successfully connected to ", host, ":", port);
+        LOG_INFO("UDP destination configured: ", host, ":", port);
     }
     else
     {
-        LOG_ERROR("Failed to connect to engine at ", host, ":", port);
+        LOG_ERROR("Failed to configure UDP destination ", host, ":", port);
         return 1;
     }
 

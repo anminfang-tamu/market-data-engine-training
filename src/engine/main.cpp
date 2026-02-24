@@ -30,7 +30,7 @@ int main()
     std::thread runner([&]()
                        { engine.run(); });
 
-    LOG_INFO("Engine Server is running on port: ", 8888);
+    LOG_INFO("Engine UDP receiver is running on 127.0.0.1:", 8888);
 
     // Wait until a termination signal arrives.
     int sig = 0;

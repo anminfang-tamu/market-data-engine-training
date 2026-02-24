@@ -3,17 +3,12 @@
 #include <thread>
 
 #include "generator/generator.hpp"
-#include "common/net/tcp_client_block.hpp"
-#include "protocol/encode.hpp"
 
 namespace generator
 {
     Generator::~Generator()
     {
-        if (socket_fd >= 0)
-        {
-            close(socket_fd);
-        }
+        net::udp::close_client(client_);
     }
 
     uint32_t Generator::next_rand()
@@ -25,31 +20,21 @@ namespace generator
 
     bool Generator::connect(const char *addr, uint16_t port)
     {
-        if (socket_fd >= 0)
-        {
-            close(socket_fd);
-        }
-
-        socket_fd = net::connect_to_server(addr, port);
-        connected = socket_fd >= 0;
-        return connected;
+        return net::udp::open_client(client_, addr, port);
     }
 
     bool Generator::send(const protocol::MarketDataMsg &msg)
     {
-        if (!connected || socket_fd < 0)
+        if (!client_.connected || client_.fd < 0)
         {
             return false;
         }
-        auto bytes = protocol::encode(msg);
-        bool sent = net::send_all(socket_fd, bytes.data(), bytes.size());
-
-        return sent;
+        return net::udp::send_message(client_, msg);
     }
 
     bool Generator::run(int count, int rate, int seed, int gap_mod, int gap_span)
     {
-        if (!connected || socket_fd < 0)
+        if (!client_.connected || client_.fd < 0)
         {
             return false;
         }

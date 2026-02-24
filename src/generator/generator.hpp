@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 
+#include "common/net/udp_client.hpp"
 #include "protocol/md_message.hpp"
 
 namespace generator
@@ -19,8 +20,7 @@ namespace generator
         uint32_t next_rand();
         protocol::MarketDataMsg make_message();
 
-        int socket_fd{-1};
-        bool connected{false};
+        net::udp::Client client_{};
         uint32_t symbol_count_{1};
         uint32_t rng_state_{1}; // random number generator(RNG)
         uint64_t seq_{0};

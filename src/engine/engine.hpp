@@ -3,7 +3,7 @@
 #include <thread>
 
 #include "common/metrics/metrics.hpp"
-#include "common/net/tcp_server_nonblock_epoll.hpp"
+#include "common/net/udp_server.hpp"
 #include "containers/frame_pool.hpp"
 
 namespace engine {
@@ -27,7 +27,7 @@ private:
   std::thread consumer_;
   std::thread reporter_;
 
-  net::ServerHandle handle_;
+  net::udp::ServerHandle handle_;
 
   containers::FramePool<4096> pool_;
 
