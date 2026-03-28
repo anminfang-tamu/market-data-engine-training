@@ -28,6 +28,8 @@ add_executable(generator_app generator/main.cpp)
 add_library(common_lib
     common/logging/logger.cpp
     common/metrics/metrics.cpp
+    common/net/v2/udp_receiver.cpp
+    common/net/v2/udp_sender.cpp
 )
 target_include_directories(common_lib PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
