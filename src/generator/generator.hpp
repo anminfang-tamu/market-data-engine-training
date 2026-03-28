@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-#include "common/net/udp_client.hpp"
+#include "common/net/v1/udp_client.hpp"
 #include "protocol/md_message.hpp"
 
 namespace generator

@@ -2,6 +2,9 @@
 
 #include <cerrno>
 #include <cstdio>
+#include <sys/epoll.h>
+#include <utility>
+#include <vector>
 
 namespace net::udp::v2 {
 
@@ -12,6 +15,27 @@ void reset_frame(RxFrame &frame) {
   frame.truncated = false;
 }
 } // namespace
+
+Receiver::Receiver(Receiver &&other) noexcept
+    : fd_(std::exchange(other.fd_, -1)),
+      epfd_(std::exchange(other.epfd_, -1)),
+      connected_(std::exchange(other.connected_, false)),
+      remote_(std::exchange(other.remote_, sockaddr_in{})),
+      stats_(other.stats_) {}
+
+Receiver &Receiver::operator=(Receiver &&other) noexcept {
+  if (this == &other) {
+    return *this;
+  }
+
+  close();
+  fd_ = std::exchange(other.fd_, -1);
+  epfd_ = std::exchange(other.epfd_, -1);
+  connected_ = std::exchange(other.connected_, false);
+  remote_ = std::exchange(other.remote_, sockaddr_in{});
+  stats_ = other.stats_;
+  return *this;
+}
 
 bool Receiver::open(const ReceiverConfig &cfg) {
   // close all previous connections
@@ -171,17 +195,18 @@ int Receiver::receive_batch(RxFrame *frames, size_t count) {
   }
 
   if (frames == nullptr) {
-    ++stats.received_errors;
+    ++stats_.received_errors;
     return -1;
   }
 
-  std::vector<msghdr> msgs(count);
+  std::vector<mmsghdr> msgs(count);
   std::vector<iovec> iovecs(count);
+  std::vector<sockaddr_in> peers(count);
 
   for (size_t i = 0; i < count; ++i) {
     reset_frame(frames[i]);
     if (frames[i].data == nullptr || frames[i].capacity == 0) {
-      ++stats.received_errors;
+      ++stats_.received_errors;
       return -1;
     }
 
@@ -191,97 +216,95 @@ int Receiver::receive_batch(RxFrame *frames, size_t count) {
     msgs[i].msg_hdr.msg_iovlen = 1;
 
     if (!connected_) {
-      msgs[i].msg_hdr.msg_name = &frames[i].peer;
-      msgs[i].msg_hdr.msg_namelen = sizeof(frames[i].peer);
-    }
-
-    for (;;) {
-      const int n =
-          ::recvmmsg(fd_, msgs.data(), static_cast<unsigned int>(count),
-                     MSG_DONTWAIT, nullptr);
-      if (n > 0) {
-        for (int i = 0; i < n; ++i) {
-          frames[i].len = static_cast<size_t>(msgs[i].msg_len);
-          frames[i].truncated = (msgs[i].msg_hdr.msg_flags & MSG_TRUNC) != 0;
-          if (connected_) {
-            frames[i].peer = remote_;
-          }
-          ++stats_.received_packets;
-          stats_.received_bytes += static_cast<uint64_t>(frames[i].len);
-        }
-        return n;
-      }
-
-      if (n == -1 && errno == EINTR) {
-        continue;
-      }
-      if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-        ++stats_.eagain;
-        return 0;
-      }
-
-      if (n == -1) {
-        ++stats_.received_errors;
-      }
-      return -1;
+      msgs[i].msg_hdr.msg_name = &peers[i];
+      msgs[i].msg_hdr.msg_namelen = sizeof(peers[i]);
     }
   }
 
-  int Receiver::epoll_receive(RxFrame * frame, size_t count, int timeout_ms) {
-    if (!make_epoll()) {
-      ++stats.received_errors;
-      return -1;
+  for (;;) {
+    const int n = ::recvmmsg(fd_, msgs.data(), static_cast<unsigned int>(count),
+                             MSG_DONTWAIT, nullptr);
+    if (n > 0) {
+      for (int i = 0; i < n; ++i) {
+        frames[i].len = static_cast<size_t>(msgs[i].msg_len);
+        frames[i].truncated = (msgs[i].msg_hdr.msg_flags & MSG_TRUNC) != 0;
+        frames[i].peer = connected_ ? remote_ : peers[i];
+        ++stats_.received_packets;
+        stats_.received_bytes += static_cast<uint64_t>(frames[i].len);
+      }
+      return n;
     }
 
-    epoll_event event{};
-    for (;;) {
-      const int n = epoll_wait(epfd, &event, 1, timeout_ms);
-      if (n > 0) {
-        if (event.events & (EPOLLERR | EPOLLHUP)) {
-          ++stats_.received_errors;
-          return -1;
-        }
-        return receive_batch(frames, count);
-      }
+    if (n == -1 && errno == EINTR) {
+      continue;
+    }
+    if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+      ++stats_.eagain;
+      return 0;
+    }
 
-      if (n == 0) {
-        return 0;
-      }
-      if (errno == EINTR) {
-        continue;
-      }
-
+    if (n == -1) {
       ++stats_.received_errors;
-      return -1;
     }
+    return -1;
+  }
+}
+
+int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
+  if (!ensure_epoll()) {
+    ++stats_.received_errors;
+    return -1;
   }
 
-  bool Receiver::make_epoll() {
-    if (fd_ < 0) {
-      return false;
+  epoll_event event{};
+  for (;;) {
+    const int n = ::epoll_wait(epfd_, &event, 1, timeout_ms);
+    if (n > 0) {
+      if (event.events & (EPOLLERR | EPOLLHUP)) {
+        ++stats_.received_errors;
+        return -1;
+      }
+      return receive_batch(frames, count);
     }
 
-    if (epfd_ >= 0) {
-      return true;
+    if (n == 0) {
+      return 0;
+    }
+    if (errno == EINTR) {
+      continue;
     }
 
-    const int epfd = ::epoll_create1(EPOLL_CLOEXEC);
-    if (epfd == -1) {
-      std::perror("epoll_create1");
-      return false;
-    }
+    ++stats_.received_errors;
+    return -1;
+  }
+}
 
-    epoll_event event{};
-    event.events = EPOLLIN | EPOLLET;
-    event.data.fd = fd_;
-    if (::epoll_ctl(epfd, EPOLL_CTL_ADD, fd_, &event) == -1) {
-      std::perror("epoll_ctl");
-      ::close(epfd);
-      return false;
-    }
+bool Receiver::ensure_epoll() {
+  if (fd_ < 0) {
+    return false;
+  }
 
-    epfd_ = epfd;
-
+  if (epfd_ >= 0) {
     return true;
   }
+
+  const int epfd = ::epoll_create1(EPOLL_CLOEXEC);
+  if (epfd == -1) {
+    std::perror("epoll_create1");
+    return false;
+  }
+
+  epoll_event event{};
+  event.events = EPOLLIN | EPOLLET;
+  event.data.fd = fd_;
+  if (::epoll_ctl(epfd, EPOLL_CTL_ADD, fd_, &event) == -1) {
+    std::perror("epoll_ctl");
+    ::close(epfd);
+    return false;
+  }
+
+  epfd_ = epfd;
+
+  return true;
+}
 } // namespace net::udp::v2
