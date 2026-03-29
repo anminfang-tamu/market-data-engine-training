@@ -50,6 +50,7 @@ public:
   int send_batch(const TxFrame *frames, size_t count);
 
   int fd() const { return fd_; }
+  bool running() const { return fd_ >= 0; }
   const SenderStats &stats() const { return stats_; }
 
 private:
