@@ -5,7 +5,7 @@
 #include <thread>
 #include <pthread.h>
 
-#include "engine/engine.hpp"
+#include "engine/v2/engine.hpp"
 #include "common/logging/logger.hpp"
 
 int main()
@@ -26,23 +26,25 @@ int main()
     sigaddset(&set, SIGTERM);
     pthread_sigmask(SIG_BLOCK, &set, nullptr);
 
-    engine::Engine engine;
-    std::thread runner([&]()
-                       { engine.run(); });
+    engine::v2::Engine engine;
+    net::udp::v2::ReceiverConfig cfg{};
+    cfg.local_ip = "0.0.0.0";
+    cfg.local_port = 8888;
+    cfg.connect_socket = false;
 
-    LOG_INFO("Engine UDP receiver is running on 127.0.0.1:", 8888);
+    if (!engine.receive(cfg))
+    {
+        LOG_ERROR("Failed to start engine UDP receiver on ", cfg.local_ip, ":", cfg.local_port);
+        return 1;
+    }
+
+    LOG_INFO("Engine UDP receiver is running on ", cfg.local_ip, ":", cfg.local_port);
 
     // Wait until a termination signal arrives.
     int sig = 0;
     sigwait(&set, &sig);
 
-    bool stopped = engine.stop();
-    if (stopped)
-    {
-        LOG_INFO("Engine stopped!!!");
-    }
-    if (runner.joinable())
-    {
-        runner.join();
-    }
+    engine.stop();
+    LOG_INFO("Engine stopped!!!");
+    return 0;
 }

@@ -38,7 +38,10 @@ int main() {
   const int gap_mod = 1000; // inject a gap when rand % gap_mod < gap_span
   const int gap_span = 1;   // skip this many seq numbers when triggered
 
-  gen.run(count, rate, seed, gap_mod, gap_span);
+  if (!gen.run(count, rate, seed, gap_mod, gap_span)) {
+    LOG_ERROR("Generator run failed");
+    return 1;
+  }
 
   // burst + normal
   // const int burst_count = 100'000;

@@ -74,5 +74,5 @@ target_link_libraries(generator_lib PUBLIC common_lib protocol_lib containers_li
 target_link_libraries(generator_v2_lib PUBLIC common_lib protocol_lib containers_lib)
 
 # Link app & lib
-target_link_libraries(engine_app PRIVATE engine_lib)
+target_link_libraries(engine_app PRIVATE engine_v2_lib)
 target_link_libraries(generator_app PRIVATE generator_v2_lib)

@@ -18,9 +18,10 @@ public:
   bool receive(const net::udp::v2::ReceiverConfig &cfg);
   void stop();
 
+private:
+  void io_loop();
   void process();
 
-private:
   std::atomic<bool> running_{false};
   net::udp::v2::ReceiverConfig cfg_;
   net::udp::v2::Receiver receiver_;
@@ -29,6 +30,7 @@ private:
   bool seq_initialized_{false};
 
   metrics::Metrics m_;
+  std::thread io_thread_;
   std::thread consumer_;
   std::thread reporter_;
 
