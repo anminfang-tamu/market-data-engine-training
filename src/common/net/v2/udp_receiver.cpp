@@ -270,6 +270,7 @@ int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
 
   epoll_event event{};
   for (;;) {
+    // to receive 32 packets once a time
     const int n = ::epoll_wait(epfd_, &event, 1, timeout_ms);
     if (n > 0) {
       if (event.events & (EPOLLERR | EPOLLHUP)) {

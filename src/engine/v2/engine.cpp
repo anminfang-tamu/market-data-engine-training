@@ -130,7 +130,7 @@ void Engine::io_loop() {
   std::array<size_t, kBatch> indices{};
   std::array<net::udp::v2::RxFrame, kBatch> frames{};
 
-  while (running_.load(std::memory_order_relaxed)) {
+  const auto reserve_frames = [&]() -> size_t {
     size_t reserved = 0;
     for (; reserved < kBatch; ++reserved) {
       if (!pool_.free.pop(indices[reserved])) {
@@ -142,46 +142,87 @@ void Engine::io_loop() {
       frame.data = pool_.slots[indices[reserved]].data();
       frame.capacity = pool_.slots[indices[reserved]].size();
     }
+    return reserved;
+  };
 
+  const auto release_reserved = [&](size_t begin, size_t end) {
+    for (size_t i = begin; i < end; ++i) {
+      pool_.free.push(indices[i]);
+    }
+  };
+
+  const auto publish_batch = [&](int received, size_t reserved) {
+    for (int i = 0; i < received; ++i) {
+      if (frames[i].truncated || frames[i].len != protocol::kWireSize) {
+        m_.inc_drops();
+        pool_.free.push(indices[i]);
+        continue;
+      }
+
+      if (!pool_.ready.push(indices[i])) {
+        m_.inc_drops();
+        pool_.free.push(indices[i]);
+      }
+    }
+
+    release_reserved(static_cast<size_t>(received), reserved);
+  };
+
+  while (running_.load(std::memory_order_relaxed)) {
+    size_t reserved = reserve_frames();
     if (reserved == 0) {
       spin_pause();
       continue;
     }
 
-    const int n = receiver_.epoll_receive(frames.data(), reserved, 500);
-    if (n > 0) {
-      for (int i = 0; i < n; ++i) {
-        if (frames[i].truncated || frames[i].len != protocol::kWireSize) {
-          m_.inc_drops();
-          pool_.free.push(indices[i]);
-          continue;
-        }
-
-        if (!pool_.ready.push(indices[i])) {
-          m_.inc_drops();
-          pool_.free.push(indices[i]);
-        }
-      }
-
-      for (size_t i = static_cast<size_t>(n); i < reserved; ++i) {
-        pool_.free.push(indices[i]);
-      }
-      continue;
-    }
-
-    for (size_t i = 0; i < reserved; ++i) {
-      pool_.free.push(indices[i]);
-    }
-
+    int n = receiver_.epoll_receive(frames.data(), reserved, 500);
     if (n == 0) {
+      release_reserved(0, reserved);
       continue;
     }
 
-    if (running_.load(std::memory_order_relaxed)) {
+    if (n < 0) {
+      release_reserved(0, reserved);
+      if (running_.load(std::memory_order_relaxed)) {
+        LOG_ERROR("Receiver epoll_receive failed");
+        running_.store(false, std::memory_order_relaxed);
+      }
+      break;
+    }
+
+    bool receive_error = false;
+    while (running_.load(std::memory_order_relaxed) && n > 0) {
+      publish_batch(n, reserved);
+
+      reserved = reserve_frames();
+      if (reserved == 0) {
+        break;
+      }
+
+      n = receiver_.receive_batch(frames.data(), reserved);
+      if (n == 0) {
+        release_reserved(0, reserved);
+        break;
+      }
+
+      if (n < 0) {
+        release_reserved(0, reserved);
+        receive_error = true;
+        break;
+      }
+    }
+
+    if (receive_error && running_.load(std::memory_order_relaxed)) {
+      LOG_ERROR("Receiver receive_batch failed while draining socket");
+      running_.store(false, std::memory_order_relaxed);
+      break;
+    }
+
+    if (n < 0 && running_.load(std::memory_order_relaxed)) {
       LOG_ERROR("Receiver epoll_receive failed");
       running_.store(false, std::memory_order_relaxed);
+      break;
     }
-    break;
   }
 }
 
