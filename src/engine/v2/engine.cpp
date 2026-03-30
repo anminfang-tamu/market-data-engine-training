@@ -124,6 +124,7 @@ void Engine::stop() {
   }
 }
 
+// cycle: free -> io_loop -> ready -> process -> free
 void Engine::io_loop() {
   constexpr size_t kBatch = 32;
   std::array<size_t, kBatch> indices{};
@@ -136,6 +137,7 @@ void Engine::io_loop() {
         break;
       }
 
+      // pointing frame to actual slot
       auto &frame = frames[reserved];
       frame.data = pool_.slots[indices[reserved]].data();
       frame.capacity = pool_.slots[indices[reserved]].size();
