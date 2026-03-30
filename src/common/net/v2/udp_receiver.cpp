@@ -268,7 +268,6 @@ int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
     return -1;
   }
 
-#if defined(__linux__)
   epoll_event event{};
   for (;;) {
     const int n = ::epoll_wait(epfd_, &event, 1, timeout_ms);
@@ -290,32 +289,6 @@ int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
     ++stats_.received_errors;
     return -1;
   }
-#else
-  pollfd pfd{};
-  pfd.fd = fd_;
-  pfd.events = POLLIN;
-
-  for (;;) {
-    const int n = ::poll(&pfd, 1, timeout_ms);
-    if (n > 0) {
-      if (pfd.revents & (POLLERR | POLLHUP | POLLNVAL)) {
-        ++stats_.received_errors;
-        return -1;
-      }
-      return receive_batch(frames, count);
-    }
-
-    if (n == 0) {
-      return 0;
-    }
-    if (errno == EINTR) {
-      continue;
-    }
-
-    ++stats_.received_errors;
-    return -1;
-  }
-#endif
 }
 
 bool Receiver::ensure_epoll() {
