@@ -7,13 +7,14 @@ add_executable(protocol_tests
     unit/test_generator.cpp
     unit/test_normalize.cpp
     unit/test_blocked_bounded_queue.cpp
+    unit/test_frame_pool.cpp
 )
 target_link_libraries(protocol_tests
     GTest::gtest_main
     protocol_lib
     common_lib
     generator_lib
-    engine_lib
+    engine_v2_lib
 )
 
 include(GoogleTest)

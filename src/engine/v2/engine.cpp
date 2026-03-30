@@ -8,16 +8,29 @@
 #include <array>
 #include <cerrno>
 #include <chrono>
-#include <cstring>
-#include <immintrin.h>
-#include <sys/timerfd.h>
 #include <thread>
 #include <unistd.h>
+
+#if defined(__linux__)
+#include <sys/timerfd.h>
+#endif
+
+#if defined(__x86_64__) || defined(__i386__)
+#include <immintrin.h>
+#endif
 
 namespace engine::v2 {
 
 namespace {
-inline void spin_pause() { _mm_pause(); }
+inline void spin_pause() {
+#if defined(__x86_64__) || defined(__i386__)
+  _mm_pause();
+#elif defined(__aarch64__) || defined(__arm__)
+  __asm__ __volatile__("yield");
+#else
+  std::this_thread::yield();
+#endif
+}
 } // namespace
 
 Engine::~Engine() { stop(); }
@@ -50,6 +63,7 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
 
   reporter_ = std::thread([this] {
     common::thread::pin_current_thread(metrics_cpu_);
+#if defined(__linux__)
     const int tfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
     if (tfd == -1) {
       while (running_.load(std::memory_order_relaxed)) {
@@ -80,7 +94,16 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
       auto snap = m_.snapshot();
       LOG_INFO("Metrics ", m_.to_string(snap));
     }
-    close(tfd);
+    ::close(tfd);
+#else
+    while (running_.load(std::memory_order_relaxed)) {
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+      if (!running_.load(std::memory_order_relaxed))
+        break;
+      auto snap = m_.snapshot();
+      LOG_INFO("Metrics ", m_.to_string(snap));
+    }
+#endif
   });
 
   return true;
@@ -103,37 +126,49 @@ void Engine::stop() {
 
 void Engine::io_loop() {
   constexpr size_t kBatch = 32;
-  std::array<containers::Frame, kBatch> buffers{};
+  std::array<size_t, kBatch> indices{};
   std::array<net::udp::v2::RxFrame, kBatch> frames{};
 
-  for (size_t i = 0; i < kBatch; ++i) {
-    frames[i].data = buffers[i].data();
-    frames[i].capacity = buffers[i].size();
-  }
-
   while (running_.load(std::memory_order_relaxed)) {
-    const int n = receiver_.epoll_receive(frames.data(), frames.size(), 500);
+    size_t reserved = 0;
+    for (; reserved < kBatch; ++reserved) {
+      if (!pool_.free.pop(indices[reserved])) {
+        break;
+      }
+
+      auto &frame = frames[reserved];
+      frame.data = pool_.slots[indices[reserved]].data();
+      frame.capacity = pool_.slots[indices[reserved]].size();
+    }
+
+    if (reserved == 0) {
+      spin_pause();
+      continue;
+    }
+
+    const int n = receiver_.epoll_receive(frames.data(), reserved, 500);
     if (n > 0) {
       for (int i = 0; i < n; ++i) {
         if (frames[i].truncated || frames[i].len != protocol::kWireSize) {
           m_.inc_drops();
+          pool_.free.push(indices[i]);
           continue;
         }
 
-        size_t idx = 0;
-        if (!pool_.free.pop(idx)) {
+        if (!pool_.ready.push(indices[i])) {
           m_.inc_drops();
-          continue;
-        }
-
-        std::memcpy(pool_.slots[idx].data(), buffers[i].data(),
-                    protocol::kWireSize);
-        if (!pool_.ready.push(idx)) {
-          m_.inc_drops();
-          pool_.free.push(idx);
+          pool_.free.push(indices[i]);
         }
       }
+
+      for (size_t i = static_cast<size_t>(n); i < reserved; ++i) {
+        pool_.free.push(indices[i]);
+      }
       continue;
+    }
+
+    for (size_t i = 0; i < reserved; ++i) {
+      pool_.free.push(indices[i]);
     }
 
     if (n == 0) {

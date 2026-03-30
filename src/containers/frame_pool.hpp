@@ -15,6 +15,8 @@ template <size_t Capacity> struct FramePool {
   RingBuffer<size_t, Capacity> ready;
 
   void init() {
+    free.reset();
+    ready.reset();
     for (size_t i = 0; i < Capacity; ++i) {
       free.push(i);
     }

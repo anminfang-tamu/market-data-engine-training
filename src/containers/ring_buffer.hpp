@@ -15,6 +15,7 @@ namespace containers
     public:
         bool empty() const noexcept;
         bool full() const noexcept;
+        void reset() noexcept;
 
         bool push(const T &data) noexcept;
         bool pop(T &data) noexcept;
@@ -39,25 +40,31 @@ namespace containers
     template <typename T, size_t Capacity>
     bool RingBuffer<T, Capacity>::full() const noexcept
     {
+        const size_t h = head_.load(std::memory_order_acquire);
         const size_t t = tail_.load(std::memory_order_acquire);
-        const size_t next = (t + 1) & mask_;
-        const size_t h = head_.load(std::memory_order_relaxed);
-        return next == h;
+        return (t - h) == Capacity;
+    }
+
+    template <typename T, size_t Capacity>
+    void RingBuffer<T, Capacity>::reset() noexcept
+    {
+        head_.store(0, std::memory_order_relaxed);
+        tail_.store(0, std::memory_order_relaxed);
     }
 
     template <typename T, size_t Capacity>
     bool RingBuffer<T, Capacity>::push(const T &data) noexcept
     {
+        const size_t h = head_.load(std::memory_order_acquire);
         const size_t t = tail_.load(std::memory_order_relaxed);
-        const size_t next = (t + 1) & mask_;
 
-        if (next == head_.load(std::memory_order_acquire))
+        if ((t - h) == Capacity)
         {
             return false; // full
         }
 
-        buffer_[t] = data;
-        tail_.store(next, std::memory_order_release);
+        buffer_[t & mask_] = data;
+        tail_.store(t + 1, std::memory_order_release);
         return true;
     }
 
@@ -72,9 +79,8 @@ namespace containers
             return false; // empty
         }
 
-        data = buffer_[h];
-        const size_t next = (h + 1) & mask_;
-        head_.store(next, std::memory_order_release);
+        data = buffer_[h & mask_];
+        head_.store(h + 1, std::memory_order_release);
         return true;
     }
 

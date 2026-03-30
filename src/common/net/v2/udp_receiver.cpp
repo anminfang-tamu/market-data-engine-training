@@ -2,9 +2,14 @@
 
 #include <cerrno>
 #include <cstdio>
-#include <sys/epoll.h>
 #include <utility>
 #include <vector>
+
+#if defined(__linux__)
+#include <sys/epoll.h>
+#else
+#include <poll.h>
+#endif
 
 namespace net::udp::v2 {
 
@@ -17,8 +22,7 @@ void reset_frame(RxFrame &frame) {
 } // namespace
 
 Receiver::Receiver(Receiver &&other) noexcept
-    : fd_(std::exchange(other.fd_, -1)),
-      epfd_(std::exchange(other.epfd_, -1)),
+    : fd_(std::exchange(other.fd_, -1)), epfd_(std::exchange(other.epfd_, -1)),
       connected_(std::exchange(other.connected_, false)),
       remote_(std::exchange(other.remote_, sockaddr_in{})),
       stats_(other.stats_) {}
@@ -199,9 +203,15 @@ int Receiver::receive_batch(RxFrame *frames, size_t count) {
     return -1;
   }
 
-  std::vector<mmsghdr> msgs(count);
-  std::vector<iovec> iovecs(count);
-  std::vector<sockaddr_in> peers(count);
+  thread_local std::vector<mmsghdr> msgs;
+  thread_local std::vector<iovec> iovecs;
+  thread_local std::vector<sockaddr_in> peers;
+
+  if (msgs.size() < count) {
+    msgs.resize(count);
+    iovecs.resize(count);
+    peers.resize(count);
+  }
 
   for (size_t i = 0; i < count; ++i) {
     reset_frame(frames[i]);
@@ -210,12 +220,14 @@ int Receiver::receive_batch(RxFrame *frames, size_t count) {
       return -1;
     }
 
+    msgs[i] = {};
     iovecs[i].iov_base = frames[i].data;
     iovecs[i].iov_len = frames[i].capacity;
     msgs[i].msg_hdr.msg_iov = &iovecs[i];
     msgs[i].msg_hdr.msg_iovlen = 1;
 
     if (!connected_) {
+      peers[i] = {};
       msgs[i].msg_hdr.msg_name = &peers[i];
       msgs[i].msg_hdr.msg_namelen = sizeof(peers[i]);
     }
@@ -256,6 +268,7 @@ int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
     return -1;
   }
 
+#if defined(__linux__)
   epoll_event event{};
   for (;;) {
     const int n = ::epoll_wait(epfd_, &event, 1, timeout_ms);
@@ -277,6 +290,32 @@ int Receiver::epoll_receive(RxFrame *frames, size_t count, int timeout_ms) {
     ++stats_.received_errors;
     return -1;
   }
+#else
+  pollfd pfd{};
+  pfd.fd = fd_;
+  pfd.events = POLLIN;
+
+  for (;;) {
+    const int n = ::poll(&pfd, 1, timeout_ms);
+    if (n > 0) {
+      if (pfd.revents & (POLLERR | POLLHUP | POLLNVAL)) {
+        ++stats_.received_errors;
+        return -1;
+      }
+      return receive_batch(frames, count);
+    }
+
+    if (n == 0) {
+      return 0;
+    }
+    if (errno == EINTR) {
+      continue;
+    }
+
+    ++stats_.received_errors;
+    return -1;
+  }
+#endif
 }
 
 bool Receiver::ensure_epoll() {
@@ -284,6 +323,7 @@ bool Receiver::ensure_epoll() {
     return false;
   }
 
+#if defined(__linux__)
   if (epfd_ >= 0) {
     return true;
   }
@@ -295,7 +335,7 @@ bool Receiver::ensure_epoll() {
   }
 
   epoll_event event{};
-  event.events = EPOLLIN | EPOLLET;
+  event.events = EPOLLIN;
   event.data.fd = fd_;
   if (::epoll_ctl(epfd, EPOLL_CTL_ADD, fd_, &event) == -1) {
     std::perror("epoll_ctl");
@@ -306,5 +346,8 @@ bool Receiver::ensure_epoll() {
   epfd_ = epfd;
 
   return true;
+#else
+  return true;
+#endif
 }
 } // namespace net::udp::v2
