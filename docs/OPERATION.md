@@ -6,7 +6,8 @@ kernel UDP path for the engine process.
 Example:
 
 ```bash
-sudo DURATION=15 PERF_FREQ=499 ./scripts/monitor_stage1_kernel.sh <engine_pid> 8888 eth0
+PID=$(pgrep -n engine_app)
+sudo DURATION=15 PERF_FREQ=499 ./scripts/monitor_stage1_kernel.sh <engine_pid> 8888 ens5
 ```
 
 Arguments:

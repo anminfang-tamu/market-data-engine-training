@@ -227,34 +227,49 @@ void Engine::io_loop() {
 }
 
 void Engine::process() {
+  constexpr size_t kBatch = 32;
   protocol::MarketDataMsg msg{};
+  std::array<size_t, kBatch> indices{};
+
   while (running_.load(std::memory_order_relaxed) || !pool_.ready.empty()) {
-    size_t idx = 0;
-    if (pool_.ready.pop(idx)) {
-      if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize, msg)) {
-        m_.inc_received();
-
-        if (!seq_initialized_) {
-          expected_seq_num_ = msg.seq_num + 1;
-          seq_initialized_ = true;
-          m_.inc_processed();
-        } else if (msg.seq_num == expected_seq_num_) {
-          ++expected_seq_num_;
-          m_.inc_processed();
-        } else if (msg.seq_num > expected_seq_num_) {
-          const uint64_t gap = msg.seq_num - expected_seq_num_;
-          m_.inc_seq_num_gaps(gap);
-          expected_seq_num_ = msg.seq_num + 1;
-          m_.inc_processed();
-        } else {
-          // old/duplicate/out-of-order; drop for now
-          m_.inc_drops();
-        }
-
-      } else {
-        m_.inc_decode_error();
+    size_t count = 0;
+    for (; count < kBatch; ++count) {
+      if (!pool_.ready.pop(indices[count])) {
+        break;
       }
-      pool_.free.push(idx);
+    }
+
+    if (count != 0) {
+      for (size_t i = 0; i < count; ++i) {
+        const size_t idx = indices[i];
+        if (protocol::decode(pool_.slots[idx].data(), protocol::kWireSize,
+                             msg)) {
+          m_.inc_received();
+
+          if (!seq_initialized_) {
+            expected_seq_num_ = msg.seq_num + 1;
+            seq_initialized_ = true;
+            m_.inc_processed();
+          } else if (msg.seq_num == expected_seq_num_) {
+            ++expected_seq_num_;
+            m_.inc_processed();
+          } else if (msg.seq_num > expected_seq_num_) {
+            const uint64_t gap = msg.seq_num - expected_seq_num_;
+            m_.inc_seq_num_gaps(gap);
+            expected_seq_num_ = msg.seq_num + 1;
+            m_.inc_processed();
+          } else {
+            // old/duplicate/out-of-order; drop for now
+            m_.inc_drops();
+          }
+        } else {
+          m_.inc_decode_error();
+        }
+      }
+
+      for (size_t i = 0; i < count; ++i) {
+        pool_.free.push(indices[i]);
+      }
     } else {
       spin_pause();
     }
