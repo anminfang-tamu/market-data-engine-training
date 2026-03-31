@@ -16,6 +16,7 @@ int main() {
   cfg.local_port = 0;
   cfg.remote_ip = "127.0.0.1";
   cfg.remote_port = 8888;
+  cfg.sndbuf_bytes = 4 * 1024 * 1024;
   cfg.connect_socket = true;
   // constexpr const char *host = "127.0.0.1";
   // constexpr int port = 8888;

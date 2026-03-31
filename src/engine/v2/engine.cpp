@@ -11,8 +11,6 @@
 #include <thread>
 #include <unistd.h>
 
-#include <iostream>
-
 #if defined(__linux__)
 #include <sys/timerfd.h>
 #endif
@@ -172,7 +170,6 @@ void Engine::io_loop() {
 
   while (running_.load(std::memory_order_relaxed)) {
     size_t reserved = reserve_frames();
-    std::cout << "reserved for strace: " << reserved << std::endl;
     if (reserved == 0) {
       spin_pause();
       continue;

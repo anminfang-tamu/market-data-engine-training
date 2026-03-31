@@ -34,7 +34,7 @@ private:
   std::thread consumer_;
   std::thread reporter_;
 
-  containers::FramePool<4096> pool_;
+  containers::FramePool<16384> pool_;
 
   int io_cpu_{1};
   int process_cpu_{2};

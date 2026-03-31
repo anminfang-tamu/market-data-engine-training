@@ -30,6 +30,7 @@ int main()
     net::udp::v2::ReceiverConfig cfg{};
     cfg.local_ip = "0.0.0.0";
     cfg.local_port = 8888;
+    cfg.rcvbuf_bytes = 4 * 1024 * 1024;
     cfg.connect_socket = false;
 
     if (!engine.receive(cfg))
