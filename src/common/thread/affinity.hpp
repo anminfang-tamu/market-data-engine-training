@@ -2,9 +2,8 @@
 
 #include <pthread.h>
 
-#if defined(__linux__)
+#include <numa.h>
 #include <sched.h>
-#endif
 
 namespace common::thread {
 
@@ -18,6 +17,20 @@ inline bool pin_current_thread(int cpu_id) {
     return false;
   }
   return pthread_setaffinity_np(pthread_self(), sizeof(set), &set) == 0;
+}
+
+// Restrict the current thread to CPUs that belong to the given NUMA node.
+// Returns the node on success, -1 on failure.
+inline int pin_thread_to_node(int node) {
+  if (node < 0) {
+    return -1;
+  }
+
+  if (numa_available() < 0) {
+    return -1;
+  }
+
+  return numa_run_on_node(node) == 0 ? node : -1;
 }
 
 } // namespace common::thread
