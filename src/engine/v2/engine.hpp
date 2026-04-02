@@ -3,6 +3,7 @@
 #include "common/metrics/metrics.hpp"
 #include "common/net/v2/udp_receiver.hpp"
 #include "containers/frame_pool.hpp"
+#include "containers/numa_frame_pool.hpp"
 
 #include <atomic>
 #include <thread>
@@ -34,8 +35,13 @@ private:
   std::thread consumer_;
   std::thread reporter_;
 
-  containers::FramePool<16384> pool_;
+  containers::FramePool<16384> *pool_{nullptr};
 
+  // NUMA node
+  int process_node_{0};
+  int io_node_{0};
+
+  // CPU
   int io_cpu_{1};
   int process_cpu_{2};
   int metrics_cpu_{3};

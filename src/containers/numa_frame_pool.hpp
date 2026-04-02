@@ -3,7 +3,7 @@
 #include <new>
 #include <numa.h>
 
-#include "containers/v1/frame_pool.hpp"
+#include "containers/frame_pool.hpp"
 
 #include <array>
 #include <stdexcept>

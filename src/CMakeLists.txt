@@ -69,7 +69,7 @@ target_include_directories(containers_lib INTERFACE
 
 # Link shared dependencies to the libs
 target_link_libraries(engine_lib PUBLIC common_lib protocol_lib containers_lib)
-target_link_libraries(engine_v2_lib PUBLIC common_lib protocol_lib containers_lib)
+target_link_libraries(engine_v2_lib PUBLIC common_lib protocol_lib containers_lib numa)
 target_link_libraries(generator_lib PUBLIC common_lib protocol_lib containers_lib)
 target_link_libraries(generator_v2_lib PUBLIC common_lib protocol_lib containers_lib)
 
