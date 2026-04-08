@@ -24,6 +24,34 @@ namespace engine::v2 {
 
 namespace {
 inline void spin_pause() { _mm_pause(); }
+
+template <size_t Capacity>
+containers::FramePool<Capacity> *create_frame_pool(int node, bool &pool_on_numa) {
+  if (numa_available() >= 0) {
+    pool_on_numa = true;
+    return containers::NumaFramePool<Capacity>::create(node);
+  }
+
+  auto *pool = new containers::FramePool<Capacity>();
+  pool->init();
+  pool_on_numa = false;
+  return pool;
+}
+
+template <size_t Capacity>
+void destroy_frame_pool(containers::FramePool<Capacity> *pool,
+                        bool pool_on_numa) {
+  if (pool == nullptr) {
+    return;
+  }
+
+  if (pool_on_numa) {
+    containers::NumaFramePool<Capacity>::destroy(pool);
+    return;
+  }
+
+  delete pool;
+}
 } // namespace
 
 Engine::~Engine() { stop(); }
@@ -35,11 +63,15 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
 
   cfg_ = cfg;
   try {
-    pool_ = containers::NumaFramePool<16384>::create(process_node_);
+    pool_ = create_frame_pool<16384>(process_node_, pool_on_numa_);
+    if (!pool_on_numa_) {
+      LOG_INFO("NUMA unavailable; using standard frame pool");
+    }
   } catch (const std::exception &e) {
-    LOG_ERROR("Failed to allocate NUMA frame pool on node ", process_node_,
+    LOG_ERROR("Failed to allocate engine frame pool on node ", process_node_,
               ": ", e.what());
     pool_ = nullptr;
+    pool_on_numa_ = false;
     return false;
   }
 
@@ -47,8 +79,7 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
   seq_initialized_ = false;
 
   if (!receiver_.open(cfg_)) {
-    containers::NumaFramePool<16384>::destroy(pool_);
-    pool_ = nullptr;
+    release_pool();
     return false;
   }
 
@@ -62,11 +93,8 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
   try {
     io_thread_ = std::thread([this, started = std::move(io_started_promise)]() mutable {
       if (!common::thread::pin_current_thread_to_cpu_on_node(io_node_, io_cpu_)) {
-        LOG_ERROR("Failed to pin io thread to NUMA node ", io_node_,
-                  " CPU ", io_cpu_);
-        started.set_value(false);
-        running_.store(false, std::memory_order_relaxed);
-        return;
+        LOG_WARN("Continuing without io thread affinity to NUMA node ",
+                 io_node_, " CPU ", io_cpu_);
       }
       started.set_value(true);
       io_loop();
@@ -76,11 +104,8 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
         [this, started = std::move(consumer_started_promise)]() mutable {
           if (!common::thread::pin_current_thread_to_cpu_on_node(process_node_,
                                                                  process_cpu_)) {
-            LOG_ERROR("Failed to pin consumer thread to NUMA node ",
-                      process_node_, " CPU ", process_cpu_);
-            started.set_value(false);
-            running_.store(false, std::memory_order_relaxed);
-            return;
+            LOG_WARN("Continuing without consumer thread affinity to NUMA node ",
+                     process_node_, " CPU ", process_cpu_);
           }
           started.set_value(true);
           process();
@@ -98,7 +123,10 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
 
   try {
     reporter_ = std::thread([this] {
-      common::thread::pin_current_thread(metrics_cpu_);
+      if (!common::thread::pin_current_thread(metrics_cpu_)) {
+        LOG_WARN("Continuing without metrics thread affinity to CPU ",
+                 metrics_cpu_);
+      }
 
       const int tfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC);
       if (tfd == -1) {
@@ -141,6 +169,12 @@ bool Engine::receive(const net::udp::v2::ReceiverConfig &cfg) {
   return true;
 }
 
+void Engine::release_pool() {
+  destroy_frame_pool<16384>(pool_, pool_on_numa_);
+  pool_ = nullptr;
+  pool_on_numa_ = false;
+}
+
 void Engine::stop() {
   running_.store(false, std::memory_order_relaxed);
   receiver_.close();
@@ -155,8 +189,7 @@ void Engine::stop() {
     reporter_.join();
   }
 
-  containers::NumaFramePool<16384>::destroy(pool_);
-  pool_ = nullptr;
+  release_pool();
 }
 
 // cycle: free -> io_loop -> ready -> process -> free

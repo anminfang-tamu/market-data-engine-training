@@ -22,6 +22,7 @@ public:
 private:
   void io_loop();
   void process();
+  void release_pool();
 
   std::atomic<bool> running_{false};
   net::udp::v2::ReceiverConfig cfg_;
@@ -36,6 +37,7 @@ private:
   std::thread reporter_;
 
   containers::FramePool<16384> *pool_{nullptr};
+  bool pool_on_numa_{false};
 
   // NUMA node
   int process_node_{0};

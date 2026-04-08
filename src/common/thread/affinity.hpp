@@ -41,7 +41,7 @@ inline bool pin_current_thread_to_cpu_on_node(int node, int cpu_id) {
   }
 
   if (numa_available() < 0) {
-    return false;
+    return pin_current_thread(cpu_id);
   }
 
   // verify cpu belongs to node

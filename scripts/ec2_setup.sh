@@ -11,6 +11,8 @@ sudo apt install -y \
   pkg-config \
   gdb \
   strace \
+  libnuma-dev \
+  numactl \
   linux-tools-common \
   linux-tools-generic \
   sysstat \
