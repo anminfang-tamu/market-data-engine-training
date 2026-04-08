@@ -59,6 +59,8 @@ run_capture process_maps "cat /proc/${PID}/maps"
 run_capture process_numa_maps "cat /proc/${PID}/numa_maps"
 run_capture process_threads "ps -L -p ${PID} -o pid,tid,psr,pcpu,stat,comm"
 run_capture process_taskset "command -v taskset >/dev/null && taskset -pc ${PID}"
+run_capture perf_event_sources "ls -1 /sys/bus/event_source/devices 2>/dev/null"
+run_capture_priv perf_list_brief "command -v perf >/dev/null && perf list --no-desc | sed -n '1,200p'"
 
 run_capture sockstat_before "cat /proc/net/sockstat /proc/net/sockstat6"
 run_capture softnet_before "cat /proc/net/softnet_stat"
@@ -74,8 +76,11 @@ fi
 
 run_capture pidstat_threads "command -v pidstat >/dev/null && pidstat -t -p ${PID} 1 ${DURATION}"
 
+# Keep the baseline capture portable. `perf stat -d -d` can pull in topdown
+# metrics that are not exposed on some EC2 PMU configurations, which turns the
+# basic report into syntax errors instead of useful counters.
 run_capture_priv perf_stat_basic \
-  "perf stat -d -d -p ${PID} -- sleep ${DURATION}"
+  "perf stat -e task-clock,context-switches,cpu-migrations,page-faults -p ${PID} -- sleep ${DURATION}"
 
 run_capture_priv perf_stat_events \
   "perf stat -e task-clock,cycles,instructions,branches,branch-misses,cache-references,cache-misses,context-switches,cpu-migrations,page-faults,minor-faults,major-faults -p ${PID} -- sleep ${DURATION}"

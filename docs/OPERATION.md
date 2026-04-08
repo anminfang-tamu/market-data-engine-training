@@ -22,7 +22,7 @@ Collected evidence includes:
 
 - process/thread placement and scheduler state
 - `pidstat` thread CPU samples
-- `perf stat` hardware and scheduler counters
+- `perf stat` baseline scheduler/software counters, plus hardware counters when exposed by the host PMU
 - `perf record` call graph samples
 - `strace` timing for `epoll_wait`, `recvmmsg`, and `recvmsg`
 - socket memory state via `ss`
@@ -34,6 +34,10 @@ Notes:
 
 - This gives you process-level and kernel-path evidence, not true wire-to-user
   nanosecond latency.
+- Some EC2 instance and kernel combinations do not expose hardware PMU events to
+  the guest. In that case `task-clock` and syscall/scheduler counters remain
+  useful, while `cycles`, `instructions`, cache, and topdown metrics may show as
+  unsupported.
 - To get true packet arrival timestamps later, add hardware timestamping or
   in-process timestamp probes.
 - `perf`, `strace`, and `ethtool -S` may require root privileges.
