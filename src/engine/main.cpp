@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
   }
 
   engine::v3::Engine engine;
-  engine::v3::DpdkRxSource::Config cfg;
+  engine::v3::DpdkRxSource::Config cfg{};
   cfg.port_id = env_u16("MD_ENGINE_DPDK_PORT_ID", 0);
   cfg.queue_id = env_u16("MD_ENGINE_DPDK_QUEUE_ID", 0);
 
