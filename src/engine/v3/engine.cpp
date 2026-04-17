@@ -154,6 +154,10 @@ bool DpdkRxSource::init_eal(int argc, char **argv) {
   return true;
 }
 
+std::unique_ptr<DpdkRxSource> DpdkRxSource::create() {
+  return create(Config{});
+}
+
 std::unique_ptr<DpdkRxSource> DpdkRxSource::create(Config cfg) {
   return std::make_unique<DpdkRxSourceImpl>(std::move(cfg));
 }

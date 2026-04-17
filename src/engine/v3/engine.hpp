@@ -28,7 +28,8 @@ public:
   };
 
   static bool init_eal(int argc, char **argv);
-  static std::unique_ptr<DpdkRxSource> create(Config cfg = {});
+  static std::unique_ptr<DpdkRxSource> create();
+  static std::unique_ptr<DpdkRxSource> create(Config cfg);
 
   virtual ~DpdkRxSource() = default;
 
