@@ -1,3 +1,17 @@
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(DPDK REQUIRED libdpdk)
+
+# Engine v3 lib
+add_library(engine_v3_lib
+    engine/v3/engine.cpp
+)
+target_include_directories(engine_v3_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${DPDK_INCLUDE_DIRS}
+)
+target_compile_options(engine_v3_lib PUBLIC ${DPDK_CFLAGS_OTHER})
+target_link_libraries(engine_v3_lib PUBLIC ${DPDK_LIBRARIES})
+
 # Engine lib
 add_library(engine_lib
     engine/v1/engine.cpp
