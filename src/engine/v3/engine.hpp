@@ -3,6 +3,8 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
+#include <string>
 
 namespace engine::v3 {
 
@@ -14,6 +16,20 @@ struct PacketView {
 
 class DpdkRxSource {
 public:
+  struct Config {
+    uint16_t port_id{0};
+    uint16_t queue_id{0};
+    uint16_t rx_desc{1024};
+    uint32_t mbuf_pool_size{8192};
+    uint32_t mbuf_cache_size{256};
+    int socket_id{-1};
+    bool promiscuous{true};
+    std::string mempool_name{"md_engine_rx"};
+  };
+
+  static bool init_eal(int argc, char **argv);
+  static std::unique_ptr<DpdkRxSource> create(Config cfg = {});
+
   virtual ~DpdkRxSource() = default;
 
   virtual bool open() = 0;

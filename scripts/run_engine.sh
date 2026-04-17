@@ -10,4 +10,4 @@ if [[ ! -x "${ENGINE_BIN}" ]]; then
   exit 1
 fi
 
-"${ENGINE_BIN}"
+"${ENGINE_BIN}" "$@"
