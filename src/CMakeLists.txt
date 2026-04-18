@@ -12,6 +12,13 @@ target_include_directories(engine_v3_lib PUBLIC
 target_compile_options(engine_v3_lib PUBLIC ${DPDK_CFLAGS_OTHER})
 target_link_libraries(engine_v3_lib PUBLIC ${DPDK_LIBRARIES})
 
+if (DPDK_LIBRARY_DIRS)
+    set_target_properties(engine_v3_lib PROPERTIES
+        BUILD_RPATH "${DPDK_LIBRARY_DIRS}"
+        INSTALL_RPATH "${DPDK_LIBRARY_DIRS}"
+    )
+endif()
+
 # Engine lib
 add_library(engine_lib
     engine/v1/engine.cpp
@@ -91,3 +98,10 @@ target_link_libraries(generator_v2_lib PUBLIC common_lib protocol_lib containers
 # Link app & lib
 target_link_libraries(engine_app PRIVATE engine_v3_lib)
 target_link_libraries(generator_app PRIVATE generator_v2_lib)
+
+if (DPDK_LIBRARY_DIRS)
+    set_target_properties(engine_app PROPERTIES
+        BUILD_RPATH "${DPDK_LIBRARY_DIRS}"
+        INSTALL_RPATH "${DPDK_LIBRARY_DIRS}"
+    )
+endif()
