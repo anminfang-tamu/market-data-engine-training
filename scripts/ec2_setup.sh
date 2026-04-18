@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DPDK_HUGEPAGES_2MB="${DPDK_HUGEPAGES_2MB:-0}"
+DPDK_HUGEPAGES_2MB="${DPDK_HUGEPAGES_2MB:-128}"
 DPDK_HUGE_DIR="${DPDK_HUGE_DIR:-/mnt/huge}"
+DPDK_HUGE_UID="${DPDK_HUGE_UID:-${SUDO_UID:-$(id -u)}}"
+DPDK_HUGE_GID="${DPDK_HUGE_GID:-${SUDO_GID:-$(id -g)}}"
+DPDK_HUGE_MODE="${DPDK_HUGE_MODE:-1770}"
 
 sudo yum update -y
 
@@ -64,10 +67,17 @@ if [[ "${DPDK_HUGEPAGES_2MB}" != "0" ]]; then
   echo "${DPDK_HUGEPAGES_2MB}" | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages >/dev/null
   sudo mkdir -p "${DPDK_HUGE_DIR}"
   if ! mountpoint -q "${DPDK_HUGE_DIR}"; then
-    sudo mount -t hugetlbfs nodev "${DPDK_HUGE_DIR}"
+    sudo mount -t hugetlbfs -o "uid=${DPDK_HUGE_UID},gid=${DPDK_HUGE_GID},mode=${DPDK_HUGE_MODE}" nodev "${DPDK_HUGE_DIR}"
   fi
+else
+  echo "warning: DPDK_HUGEPAGES_2MB=0 leaves hugepages disabled; DPDK engine startup against a physical NIC will fail until hugepages are reserved and mounted." >&2
 fi
 
 pkg-config --modversion libdpdk >/dev/null
+
+awk '/^HugePages_(Total|Free|Rsvd|Surp):/ { print }' /proc/meminfo
+if mountpoint -q "${DPDK_HUGE_DIR}"; then
+  echo "hugetlbfs mounted at ${DPDK_HUGE_DIR}"
+fi
 
 echo "DPDK packages are installed. Bind only a dedicated data NIC; do not move the EC2 management interface off its kernel driver."

@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="${BUILD_DIR:-${ROOT_DIR}/build/debug}"
 ENGINE_BIN="${ENGINE_BIN:-${BUILD_DIR}/src/engine_app}"
+DPDK_HUGE_DIR="${DPDK_HUGE_DIR:-/mnt/huge}"
 
 if [[ ! -x "${ENGINE_BIN}" ]]; then
   echo "engine binary not found: ${ENGINE_BIN}" >&2
@@ -17,4 +18,80 @@ if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists libdpdk; then
   fi
 fi
 
-"${ENGINE_BIN}" "$@"
+has_arg() {
+  local needle="$1"
+  shift
+  local arg
+  for arg in "$@"; do
+    if [[ "${arg}" == "${needle}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+explicit_huge_dir() {
+  local prev=""
+  local arg
+  for arg in "$@"; do
+    if [[ "${prev}" == "--huge-dir" ]]; then
+      printf '%s\n' "${arg}"
+      return 0
+    fi
+    case "${arg}" in
+      --huge-dir=*)
+        printf '%s\n' "${arg#*=}"
+        return 0
+        ;;
+    esac
+    prev="${arg}"
+  done
+  return 1
+}
+
+hugepages_total() {
+  awk '/^HugePages_Total:/ { print $2 }' /proc/meminfo
+}
+
+any_hugetlbfs_mount() {
+  awk '$3 == "hugetlbfs" { found=1 } END { exit(found ? 0 : 1) }' /proc/mounts
+}
+
+fail_hugepage_setup() {
+  local reason="$1"
+  cat >&2 <<EOF
+${reason}
+
+DPDK EAL needs reserved hugepages before the engine can start with a physical NIC.
+Recommended fix on EC2:
+  DPDK_HUGEPAGES_2MB=128 ./scripts/ec2_setup.sh
+
+Manual check:
+  grep '^HugePages_' /proc/meminfo
+  mount | grep hugetlbfs
+EOF
+  exit 1
+}
+
+ENGINE_ARGS=()
+if ! has_arg "--no-huge" "$@"; then
+  HP_TOTAL="$(hugepages_total)"
+  if [[ -z "${HP_TOTAL}" || "${HP_TOTAL}" == "0" ]]; then
+    fail_hugepage_setup "No hugepages are currently reserved."
+  fi
+
+  EXPLICIT_HUGE_DIR="$(explicit_huge_dir "$@" || true)"
+  if [[ -n "${EXPLICIT_HUGE_DIR}" ]]; then
+    if ! mountpoint -q "${EXPLICIT_HUGE_DIR}"; then
+      fail_hugepage_setup "Requested --huge-dir '${EXPLICIT_HUGE_DIR}' is not a hugetlbfs mountpoint."
+    fi
+  elif ! has_arg "--in-memory" "$@"; then
+    if mountpoint -q "${DPDK_HUGE_DIR}"; then
+      ENGINE_ARGS+=(--huge-dir "${DPDK_HUGE_DIR}")
+    elif ! any_hugetlbfs_mount; then
+      fail_hugepage_setup "No hugetlbfs mount is available for DPDK hugepage files."
+    fi
+  fi
+fi
+
+"${ENGINE_BIN}" "${ENGINE_ARGS[@]}" "$@"
