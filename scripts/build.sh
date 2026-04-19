@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_TYPE="${BUILD_TYPE:-Debug}"
+BUILD_TESTING="${BUILD_TESTING:-OFF}"
 JOBS="${JOBS:-$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)}"
 
 lowercase() {
@@ -66,6 +67,7 @@ cmake -S "${ROOT_DIR}" \
   -B "${BUILD_DIR}" \
   -G "${CMAKE_GENERATOR}" \
   -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
+  -DBUILD_TESTING="${BUILD_TESTING}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cmake --build "${BUILD_DIR}" -j"${JOBS}"

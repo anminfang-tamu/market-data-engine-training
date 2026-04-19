@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(md-engine-training VERSION 0.1 LANGUAGES CXX)
 
-enable_testing()
+include(CTest)
 
 # Default build type for single-config generator (Ninja)
 if (NOT CMAKE_BUILD_TYPE)
@@ -16,7 +16,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(src)
-add_subdirectory(tests)
 
-# GoogleTest
-add_subdirectory(third_party/googletest)
+if (BUILD_TESTING)
+    if (EXISTS "${PROJECT_SOURCE_DIR}/third_party/googletest/CMakeLists.txt")
+        add_subdirectory(third_party/googletest)
+        add_subdirectory(tests)
+    else()
+        message(FATAL_ERROR
+            "BUILD_TESTING=ON, but third_party/googletest is not populated. "
+            "Run 'git submodule update --init --recursive' or configure with "
+            "-DBUILD_TESTING=OFF."
+        )
+    endif()
+endif()
