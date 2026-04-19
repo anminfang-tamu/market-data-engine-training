@@ -68,6 +68,13 @@ if [[ "${DPDK_HUGEPAGES_2MB}" != "0" ]]; then
   sudo mkdir -p "${DPDK_HUGE_DIR}"
   if ! mountpoint -q "${DPDK_HUGE_DIR}"; then
     sudo mount -t hugetlbfs -o "uid=${DPDK_HUGE_UID},gid=${DPDK_HUGE_GID},mode=${DPDK_HUGE_MODE}" nodev "${DPDK_HUGE_DIR}"
+  else
+    CURRENT_FSTYPE="$(findmnt -n -o FSTYPE --target "${DPDK_HUGE_DIR}" 2>/dev/null || true)"
+    if [[ -n "${CURRENT_FSTYPE}" && "${CURRENT_FSTYPE}" != "hugetlbfs" ]]; then
+      echo "error: ${DPDK_HUGE_DIR} is mounted as ${CURRENT_FSTYPE}, expected hugetlbfs" >&2
+      exit 1
+    fi
+    sudo mount -t hugetlbfs -o "remount,uid=${DPDK_HUGE_UID},gid=${DPDK_HUGE_GID},mode=${DPDK_HUGE_MODE}" nodev "${DPDK_HUGE_DIR}"
   fi
 else
   echo "warning: DPDK_HUGEPAGES_2MB=0 leaves hugepages disabled; DPDK engine startup against a physical NIC will fail until hugepages are reserved and mounted." >&2

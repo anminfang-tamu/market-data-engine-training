@@ -55,6 +55,10 @@ explicit_huge_dir() {
   explicit_option_value "--huge-dir" "$@"
 }
 
+explicit_file_prefix() {
+  explicit_option_value "--file-prefix" "$@"
+}
+
 hugepages_total() {
   awk '/^HugePages_Total:/ { print $2 }' /proc/meminfo
 }
@@ -69,8 +73,8 @@ fail_hugepage_setup() {
 ${reason}
 
 DPDK EAL needs reserved hugepages before the engine can start with a physical NIC.
-Recommended fix on EC2:
-  DPDK_HUGEPAGES_2MB=128 ./scripts/ec2_setup.sh
+Recommended fix on Ubuntu EC2:
+  sudo mount -t hugetlbfs -o remount,uid=$(id -u),gid=$(id -g),mode=1770 nodev ${DPDK_HUGE_DIR}
 
 Manual check:
   grep '^HugePages_' /proc/meminfo
@@ -82,9 +86,15 @@ EOF
 ENGINE_ARGS=()
 EXPLICIT_IOVA_MODE="$(explicit_option_value "--iova-mode" "$@" || true)"
 DPDK_IOVA_MODE="${DPDK_IOVA_MODE:-va}"
+EXPLICIT_FILE_PREFIX="$(explicit_file_prefix "$@" || true)"
+DPDK_FILE_PREFIX="${DPDK_FILE_PREFIX:-md-engine}"
 
 if [[ -z "${EXPLICIT_IOVA_MODE}" && -n "${DPDK_IOVA_MODE}" ]]; then
   ENGINE_ARGS+=(--iova-mode "${DPDK_IOVA_MODE}")
+fi
+
+if [[ -z "${EXPLICIT_FILE_PREFIX}" && -n "${DPDK_FILE_PREFIX}" ]]; then
+  ENGINE_ARGS+=(--file-prefix "${DPDK_FILE_PREFIX}")
 fi
 
 if ! has_arg "--no-huge" "$@"; then
@@ -98,8 +108,14 @@ if ! has_arg "--no-huge" "$@"; then
     if ! mountpoint -q "${EXPLICIT_HUGE_DIR}"; then
       fail_hugepage_setup "Requested --huge-dir '${EXPLICIT_HUGE_DIR}' is not a hugetlbfs mountpoint."
     fi
+    if [[ ! -w "${EXPLICIT_HUGE_DIR}" ]]; then
+      fail_hugepage_setup "Requested --huge-dir '${EXPLICIT_HUGE_DIR}' is not writable by user '$(id -un)'. Remount hugetlbfs with uid=$(id -u),gid=$(id -g),mode=1770 or choose a writable hugepage mount."
+    fi
   elif ! has_arg "--in-memory" "$@"; then
     if mountpoint -q "${DPDK_HUGE_DIR}"; then
+      if [[ ! -w "${DPDK_HUGE_DIR}" ]]; then
+        fail_hugepage_setup "Hugetlbfs mount '${DPDK_HUGE_DIR}' is not writable by user '$(id -un)'. Remount it with uid=$(id -u),gid=$(id -g),mode=1770."
+      fi
       ENGINE_ARGS+=(--huge-dir "${DPDK_HUGE_DIR}")
     elif ! any_hugetlbfs_mount; then
       fail_hugepage_setup "No hugetlbfs mount is available for DPDK hugepage files."
@@ -107,6 +123,6 @@ if ! has_arg "--no-huge" "$@"; then
   fi
 fi
 
-echo "engine dpdk_port=${MD_ENGINE_DPDK_PORT_ID:-0} queue=${MD_ENGINE_DPDK_QUEUE_ID:-0} iova_mode=${EXPLICIT_IOVA_MODE:-${DPDK_IOVA_MODE:-default}}" >&2
+echo "engine dpdk_port=${MD_ENGINE_DPDK_PORT_ID:-0} queue=${MD_ENGINE_DPDK_QUEUE_ID:-0} iova_mode=${EXPLICIT_IOVA_MODE:-${DPDK_IOVA_MODE:-default}} file_prefix=${EXPLICIT_FILE_PREFIX:-${DPDK_FILE_PREFIX:-default}}" >&2
 
 "${ENGINE_BIN}" "${ENGINE_ARGS[@]}" "$@"
