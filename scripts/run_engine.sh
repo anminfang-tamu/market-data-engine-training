@@ -30,16 +30,18 @@ has_arg() {
   return 1
 }
 
-explicit_huge_dir() {
+explicit_option_value() {
+  local option="$1"
+  shift
   local prev=""
   local arg
   for arg in "$@"; do
-    if [[ "${prev}" == "--huge-dir" ]]; then
+    if [[ "${prev}" == "${option}" ]]; then
       printf '%s\n' "${arg}"
       return 0
     fi
     case "${arg}" in
-      --huge-dir=*)
+      "${option}"=*)
         printf '%s\n' "${arg#*=}"
         return 0
         ;;
@@ -47,6 +49,10 @@ explicit_huge_dir() {
     prev="${arg}"
   done
   return 1
+}
+
+explicit_huge_dir() {
+  explicit_option_value "--huge-dir" "$@"
 }
 
 hugepages_total() {
@@ -74,6 +80,13 @@ EOF
 }
 
 ENGINE_ARGS=()
+EXPLICIT_IOVA_MODE="$(explicit_option_value "--iova-mode" "$@" || true)"
+DPDK_IOVA_MODE="${DPDK_IOVA_MODE:-va}"
+
+if [[ -z "${EXPLICIT_IOVA_MODE}" && -n "${DPDK_IOVA_MODE}" ]]; then
+  ENGINE_ARGS+=(--iova-mode "${DPDK_IOVA_MODE}")
+fi
+
 if ! has_arg "--no-huge" "$@"; then
   HP_TOTAL="$(hugepages_total)"
   if [[ -z "${HP_TOTAL}" || "${HP_TOTAL}" == "0" ]]; then
@@ -93,5 +106,7 @@ if ! has_arg "--no-huge" "$@"; then
     fi
   fi
 fi
+
+echo "engine dpdk_port=${MD_ENGINE_DPDK_PORT_ID:-0} queue=${MD_ENGINE_DPDK_QUEUE_ID:-0} iova_mode=${EXPLICIT_IOVA_MODE:-${DPDK_IOVA_MODE:-default}}" >&2
 
 "${ENGINE_BIN}" "${ENGINE_ARGS[@]}" "$@"
