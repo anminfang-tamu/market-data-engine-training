@@ -262,7 +262,8 @@ bool Engine::run() {
   const std::size_t burst =
       cfg_.burst_size < kMaxBurst ? cfg_.burst_size : kMaxBurst;
 
-  while (!stop_requested_.load(std::memory_order_acquire)) {
+  while (!stop_requested_.load(std::memory_order_acquire) &&
+         (cfg_.stop_signal_flag == nullptr || *cfg_.stop_signal_flag == 0)) {
     const std::size_t n = rx_source_->poll(packets, burst);
     for (std::size_t i = 0; i < n; ++i) {
       process_one(packets[i]);

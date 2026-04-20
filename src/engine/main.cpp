@@ -5,15 +5,26 @@
 #include <cstdlib>
 #include <cstring>
 #include <limits>
-#include <pthread.h>
 #include <string>
-#include <system_error>
-#include <thread>
 
 #include "common/logging/logger.hpp"
 #include "engine/v3/engine.hpp"
 
 namespace {
+volatile std::sig_atomic_t g_stop_signal = 0;
+
+void handle_stop_signal(int sig) {
+  g_stop_signal = sig;
+}
+
+bool install_signal_handler(int sig) {
+  struct sigaction action {};
+  action.sa_handler = handle_stop_signal;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = 0;
+  return sigaction(sig, &action, nullptr) == 0;
+}
+
 uint16_t env_u16(const char *name, uint16_t fallback) {
   if (const char *value = std::getenv(name);
       value != nullptr && value[0] != '\0') {
@@ -62,12 +73,10 @@ int main(int argc, char **argv) {
   logger.set_level(Level::DEBUG);
   LOG_INFO("<======== Engine ========>");
 
-  // Block SIGINT/SIGTERM in this thread and wait on them explicitly.
-  sigset_t set;
-  sigemptyset(&set);
-  sigaddset(&set, SIGINT);
-  sigaddset(&set, SIGTERM);
-  pthread_sigmask(SIG_BLOCK, &set, nullptr);
+  if (!install_signal_handler(SIGINT) || !install_signal_handler(SIGTERM)) {
+    LOG_ERROR("Failed to install signal handlers for engine shutdown");
+    return 1;
+  }
 
   if (!engine::v3::DpdkRxSource::init_eal(argc, argv)) {
     LOG_ERROR("Failed to initialize DPDK for engine v3");
@@ -78,6 +87,7 @@ int main(int argc, char **argv) {
   engine_cfg.udp_dst_port = env_u16("MD_ENGINE_UDP_PORT", 8888);
   engine_cfg.log_each_packet =
       env_bool("MD_ENGINE_LOG_EACH_PACKET", false);
+  engine_cfg.stop_signal_flag = &g_stop_signal;
 
   engine::v3::Engine engine(engine_cfg);
   engine::v3::DpdkRxSource::Config cfg{};
@@ -96,31 +106,18 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  std::thread engine_thread;
-  try {
-    engine_thread = std::thread([&engine] {
-      if (!engine.run()) {
-        LOG_ERROR("Engine v3 run loop exited with failure");
-      }
-    });
-  } catch (const std::system_error &e) {
-    rx_source->close();
-    LOG_ERROR("Failed to start engine v3 thread: ", e.what());
-    return 1;
-  }
-
   LOG_INFO("Engine DPDK receiver is running on port ", cfg.port_id, " queue ",
            cfg.queue_id, " udp_dst_port ", engine_cfg.udp_dst_port,
            " log_each_packet ",
            engine_cfg.log_each_packet ? "true" : "false");
 
-  // Wait until a termination signal arrives.
-  int sig = 0;
-  sigwait(&set, &sig);
+  if (!engine.run()) {
+    LOG_ERROR("Engine v3 run loop exited with failure");
+    return 1;
+  }
 
-  engine.request_stop();
-  if (engine_thread.joinable()) {
-    engine_thread.join();
+  if (g_stop_signal != 0) {
+    LOG_INFO("Termination signal received: ", g_stop_signal);
   }
   LOG_INFO("Engine stopped!!!");
   return 0;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <csignal>
+
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
@@ -45,6 +47,7 @@ struct EngineConfig {
   int hot_cpu{-1};
   uint16_t udp_dst_port{8888};
   bool log_each_packet{false};
+  volatile std::sig_atomic_t *stop_signal_flag{nullptr};
 };
 
 class Engine {

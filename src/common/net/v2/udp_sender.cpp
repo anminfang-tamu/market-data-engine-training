@@ -1,9 +1,32 @@
 #include "udp_sender.hpp"
 
+#include <chrono>
 #include <cerrno>
+#include <cstring>
 #include <cstdio>
+#include <thread>
+#include <vector>
 
 namespace net::udp::v2 {
+
+namespace {
+
+constexpr int kMaxSendRetries = 200;
+
+bool is_transient_send_error(int err) {
+  return err == EAGAIN || err == EWOULDBLOCK || err == ENOBUFS;
+}
+
+void backoff_after_send_retry(int retry) {
+  if (retry < 8) {
+    std::this_thread::yield();
+    return;
+  }
+
+  std::this_thread::sleep_for(std::chrono::microseconds(50));
+}
+
+} // namespace
 
 bool Sender::open(const SenderConfig &cfg) {
   // step 0: close any previous fds
@@ -102,6 +125,7 @@ bool Sender::send_one(const void *data, size_t len) {
     return false;
   }
 
+  int retry = 0;
   for (;;) {
     const ssize_t n =
         connected_ ? ::send(fd_, data, len, 0)
@@ -116,8 +140,32 @@ bool Sender::send_one(const void *data, size_t len) {
     if (n == -1 && errno == EINTR) {
       continue;
     }
-    if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+    if (n == -1 && is_transient_send_error(errno)) {
       ++stats_.eagain;
+      if (retry < kMaxSendRetries) {
+        ++retry;
+        backoff_after_send_retry(retry);
+        continue;
+      }
+      std::fprintf(stderr, "%s failed after %d retries: %s\n",
+                   connected_ ? "send" : "sendto", kMaxSendRetries,
+                   std::strerror(errno));
+      ++stats_.sent_errors;
+      return false;
+    }
+
+    if (n >= 0 && n != static_cast<ssize_t>(len)) {
+      std::fprintf(stderr,
+                   "%s returned short datagram write: expected=%zu actual=%zd\n",
+                   connected_ ? "send" : "sendto", len, n);
+      ++stats_.sent_errors;
+      return false;
+    }
+
+    if (n == -1) {
+      std::fprintf(stderr, "%s failed: %s\n", connected_ ? "send" : "sendto",
+                   std::strerror(errno));
+      ++stats_.sent_errors;
     } else {
       ++stats_.sent_errors;
     }
@@ -133,12 +181,89 @@ int Sender::send_batch(const TxFrame *frames, size_t count) {
 
   int sent = 0;
 
+#if defined(__linux__)
+  thread_local std::vector<mmsghdr> msgs;
+  thread_local std::vector<iovec> iovecs;
+
+  while (static_cast<size_t>(sent) < count) {
+    const size_t remaining = count - static_cast<size_t>(sent);
+
+    if (msgs.size() < remaining) {
+      msgs.resize(remaining);
+      iovecs.resize(remaining);
+    }
+
+    for (size_t i = 0; i < remaining; ++i) {
+      const TxFrame &frame = frames[static_cast<size_t>(sent) + i];
+      if (frame.data == nullptr || frame.len == 0) {
+        ++stats_.sent_errors;
+        return sent;
+      }
+
+      msgs[i] = {};
+      iovecs[i].iov_base = const_cast<void *>(frame.data);
+      iovecs[i].iov_len = frame.len;
+      msgs[i].msg_hdr.msg_iov = &iovecs[i];
+      msgs[i].msg_hdr.msg_iovlen = 1;
+
+      if (!connected_) {
+        msgs[i].msg_hdr.msg_name = &remote_;
+        msgs[i].msg_hdr.msg_namelen = sizeof(remote_);
+      }
+    }
+
+    int retry = 0;
+    for (;;) {
+      const int n = ::sendmmsg(fd_, msgs.data(),
+                               static_cast<unsigned int>(remaining), 0);
+      if (n > 0) {
+        for (int i = 0; i < n; ++i) {
+          ++stats_.sent_packets;
+          stats_.sent_bytes +=
+              static_cast<uint64_t>(frames[static_cast<size_t>(sent) + i].len);
+        }
+        sent += n;
+        break;
+      }
+
+      if (n == -1 && errno == EINTR) {
+        continue;
+      }
+
+      if (n == -1 && is_transient_send_error(errno)) {
+        ++stats_.eagain;
+        if (retry < kMaxSendRetries) {
+          ++retry;
+          backoff_after_send_retry(retry);
+          continue;
+        }
+        std::fprintf(stderr, "sendmmsg failed after %d retries: %s\n",
+                     kMaxSendRetries, std::strerror(errno));
+        ++stats_.sent_errors;
+        return sent;
+      }
+
+      if (n == -1) {
+        std::fprintf(stderr, "sendmmsg failed: %s\n", std::strerror(errno));
+        ++stats_.sent_errors;
+      } else {
+        ++stats_.sent_errors;
+      }
+      return sent;
+    }
+  }
+
+  return sent;
+#else
+  
+
   for (size_t i = 0; i < count; ++i) {
     if (frames[i].data == nullptr || frames[i].len == 0) {
       ++stats_.sent_errors;
       break;
     }
 
+    int retry = 0;
     for (;;) {
       const ssize_t n =
           connected_ ? ::send(fd_, frames[i].data, frames[i].len, 0)
@@ -154,8 +279,32 @@ int Sender::send_batch(const TxFrame *frames, size_t count) {
       if (n == -1 && errno == EINTR) {
         continue;
       }
-      if (n == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+      if (n == -1 && is_transient_send_error(errno)) {
         ++stats_.eagain;
+        if (retry < kMaxSendRetries) {
+          ++retry;
+          backoff_after_send_retry(retry);
+          continue;
+        }
+        std::fprintf(stderr, "%s failed after %d retries: %s\n",
+                     connected_ ? "send" : "sendto", kMaxSendRetries,
+                     std::strerror(errno));
+        ++stats_.sent_errors;
+        return sent;
+      }
+
+      if (n >= 0 && n != static_cast<ssize_t>(frames[i].len)) {
+        std::fprintf(stderr,
+                     "%s returned short datagram write: expected=%zu actual=%zd\n",
+                     connected_ ? "send" : "sendto", frames[i].len, n);
+        ++stats_.sent_errors;
+        return sent;
+      }
+
+      if (n == -1) {
+        std::fprintf(stderr, "%s failed: %s\n",
+                     connected_ ? "send" : "sendto", std::strerror(errno));
+        ++stats_.sent_errors;
       } else {
         ++stats_.sent_errors;
       }
@@ -164,6 +313,7 @@ int Sender::send_batch(const TxFrame *frames, size_t count) {
   }
 
   return sent;
+#endif
 }
 
 } // namespace net::udp::v2

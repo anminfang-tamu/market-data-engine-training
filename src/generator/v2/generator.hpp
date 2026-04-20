@@ -16,7 +16,8 @@ public:
   bool open(const net::udp::v2::SenderConfig &cfg);
   bool send_one(const protocol::MarketDataMsg &msg);
   int send_batch(const protocol::MarketDataMsg *msgs, size_t count);
-  bool run(int count, int rate, int seed, int gap_mod = 0, int gap_span = 1);
+  bool run(int count, int rate, int seed, int gap_mod = 0, int gap_span = 1,
+           int burst_size = 1);
 
 private:
   std::atomic<bool> running_{false};

@@ -64,7 +64,7 @@ int main() {
   cfg.local_port = env_u16("MD_GENERATOR_LOCAL_PORT", 0);
   cfg.remote_ip = env_or_default("MD_GENERATOR_REMOTE_IP", "127.0.0.1");
   cfg.remote_port = env_u16("MD_GENERATOR_REMOTE_PORT", 8888);
-  cfg.sndbuf_bytes = 4 * 1024 * 1024;
+  cfg.sndbuf_bytes = env_int("MD_GENERATOR_SNDBUF_BYTES", 4 * 1024 * 1024);
   cfg.connect_socket = true;
   bool connected = gen.open(cfg);
 
@@ -81,12 +81,21 @@ int main() {
   // 10-minute soak
   const int rate = env_int("MD_GENERATOR_RATE", 50'000);
   const int duration_s = env_int("MD_GENERATOR_DURATION_S", 600);
-  const int count = rate * duration_s;
+  const int count =
+      env_int("MD_GENERATOR_COUNT",
+              rate > 0 ? rate * duration_s : 100'000);
   const int seed = env_int("MD_GENERATOR_SEED", 42);
   const int gap_mod = env_int("MD_GENERATOR_GAP_MOD", 1000);
   const int gap_span = env_int("MD_GENERATOR_GAP_SPAN", 1);
+  const int burst_size = env_int("MD_GENERATOR_BURST_SIZE", 1);
 
-  if (!gen.run(count, rate, seed, gap_mod, gap_span)) {
+  LOG_INFO("Generator config rate=", rate,
+           " duration_s=", duration_s,
+           " count=", count,
+           " burst_size=", burst_size,
+           " sndbuf_bytes=", cfg.sndbuf_bytes);
+
+  if (!gen.run(count, rate, seed, gap_mod, gap_span, burst_size)) {
     LOG_ERROR("Generator run failed");
     return 1;
   }
