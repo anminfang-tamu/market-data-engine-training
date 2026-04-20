@@ -49,7 +49,10 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  engine::v3::Engine engine;
+  engine::v3::EngineConfig engine_cfg{};
+  engine_cfg.udp_dst_port = env_u16("MD_ENGINE_UDP_PORT", 8888);
+
+  engine::v3::Engine engine(engine_cfg);
   engine::v3::DpdkRxSource::Config cfg{};
   cfg.port_id = env_u16("MD_ENGINE_DPDK_PORT_ID", 0);
   cfg.queue_id = env_u16("MD_ENGINE_DPDK_QUEUE_ID", 0);
@@ -80,7 +83,7 @@ int main(int argc, char **argv) {
   }
 
   LOG_INFO("Engine DPDK receiver is running on port ", cfg.port_id, " queue ",
-           cfg.queue_id);
+           cfg.queue_id, " udp_dst_port ", engine_cfg.udp_dst_port);
 
   // Wait until a termination signal arrives.
   int sig = 0;

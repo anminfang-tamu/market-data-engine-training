@@ -43,6 +43,7 @@ struct EngineConfig {
   std::size_t burst_size{32};
   int hot_numa_node{-1};
   int hot_cpu{-1};
+  uint16_t udp_dst_port{8888};
 };
 
 class Engine {

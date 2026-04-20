@@ -4,11 +4,16 @@
 #include "protocol/decode.hpp"
 #include "protocol/md_message.hpp"
 
+#include <netinet/in.h>
+
 #include <rte_eal.h>
 #include <rte_errno.h>
 #include <rte_ethdev.h>
+#include <rte_ether.h>
+#include <rte_ip.h>
 #include <rte_mbuf.h>
 #include <rte_mempool.h>
+#include <rte_udp.h>
 
 #include <cstring>
 #include <memory>
@@ -16,6 +21,77 @@
 #include <utility>
 
 namespace engine::v3 {
+
+namespace {
+
+bool extract_udp_payload(const PacketView &packet, uint16_t expected_dst_port,
+                         const uint8_t *&payload, std::size_t &payload_len) {
+  payload = nullptr;
+  payload_len = 0;
+
+  constexpr std::size_t kEtherHdrLen = sizeof(rte_ether_hdr);
+  constexpr std::size_t kUdpHdrLen = sizeof(rte_udp_hdr);
+
+  if (packet.data == nullptr || packet.len < kEtherHdrLen) {
+    return false;
+  }
+
+  const auto *frame = reinterpret_cast<const uint8_t *>(packet.data);
+  const auto *ether = reinterpret_cast<const rte_ether_hdr *>(frame);
+  if (rte_be_to_cpu_16(ether->ether_type) != RTE_ETHER_TYPE_IPV4) {
+    return false;
+  }
+
+  if (packet.len < kEtherHdrLen + sizeof(rte_ipv4_hdr)) {
+    return false;
+  }
+
+  const auto *ipv4 =
+      reinterpret_cast<const rte_ipv4_hdr *>(frame + kEtherHdrLen);
+  const uint8_t version_ihl = ipv4->version_ihl;
+  const uint8_t version = static_cast<uint8_t>(version_ihl >> 4);
+  const std::size_t ip_hdr_len =
+      static_cast<std::size_t>(version_ihl & 0x0fU) * 4U;
+  if (version != 4 || ip_hdr_len < sizeof(rte_ipv4_hdr)) {
+    return false;
+  }
+
+  const std::size_t ip_offset = kEtherHdrLen;
+  if (packet.len < ip_offset + ip_hdr_len + kUdpHdrLen) {
+    return false;
+  }
+
+  if (ipv4->next_proto_id != IPPROTO_UDP) {
+    return false;
+  }
+
+  const std::size_t ip_total_len = rte_be_to_cpu_16(ipv4->total_length);
+  if (ip_total_len < ip_hdr_len + kUdpHdrLen) {
+    return false;
+  }
+
+  const std::size_t udp_offset = ip_offset + ip_hdr_len;
+  if (packet.len < ip_offset + ip_total_len) {
+    return false;
+  }
+
+  const auto *udp = reinterpret_cast<const rte_udp_hdr *>(frame + udp_offset);
+  const uint16_t dst_port = rte_be_to_cpu_16(udp->dst_port);
+  if (expected_dst_port != 0 && dst_port != expected_dst_port) {
+    return false;
+  }
+
+  const std::size_t udp_len = rte_be_to_cpu_16(udp->dgram_len);
+  if (udp_len < kUdpHdrLen) {
+    return false;
+  }
+
+  payload = frame + udp_offset + kUdpHdrLen;
+  payload_len = udp_len - kUdpHdrLen;
+  return packet.len >= (udp_offset + kUdpHdrLen + payload_len);
+}
+
+} // namespace
 
 class DpdkRxSourceImpl : public DpdkRxSource {
 public:
@@ -32,8 +108,9 @@ public:
       return false;
     }
 
-    const int socket_id =
-        cfg_.socket_id >= 0 ? cfg_.socket_id : rte_eth_dev_socket_id(cfg_.port_id);
+    const int socket_id = cfg_.socket_id >= 0
+                              ? cfg_.socket_id
+                              : rte_eth_dev_socket_id(cfg_.port_id);
 
     if (mbuf_pool_ == nullptr) {
       const std::string mempool_name =
@@ -49,7 +126,8 @@ public:
     }
 
     rte_eth_conf port_conf{};
-    const int configure_ret = rte_eth_dev_configure(cfg_.port_id, 1, 0, &port_conf);
+    const int configure_ret =
+        rte_eth_dev_configure(cfg_.port_id, 1, 0, &port_conf);
     if (configure_ret < 0) {
       LOG_ERROR("Failed to configure DPDK port ", cfg_.port_id, ": ",
                 rte_strerror(-configure_ret));
@@ -57,8 +135,9 @@ public:
       return false;
     }
 
-    const int queue_ret = rte_eth_rx_queue_setup(
-        cfg_.port_id, cfg_.queue_id, cfg_.rx_desc, socket_id, nullptr, mbuf_pool_);
+    const int queue_ret =
+        rte_eth_rx_queue_setup(cfg_.port_id, cfg_.queue_id, cfg_.rx_desc,
+                               socket_id, nullptr, mbuf_pool_);
     if (queue_ret < 0) {
       LOG_ERROR("Failed to configure RX queue ", cfg_.queue_id, " on port ",
                 cfg_.port_id, ": ", rte_strerror(-queue_ret));
@@ -107,7 +186,8 @@ public:
     rte_mbuf *mbufs[kMaxBurst];
     const uint16_t burst =
         static_cast<uint16_t>(capacity < kMaxBurst ? capacity : kMaxBurst);
-    const uint16_t n = rte_eth_rx_burst(cfg_.port_id, cfg_.queue_id, mbufs, burst);
+    const uint16_t n =
+        rte_eth_rx_burst(cfg_.port_id, cfg_.queue_id, mbufs, burst);
 
     for (uint16_t i = 0; i < n; ++i) {
       packets[i].data = reinterpret_cast<const std::byte *>(
@@ -204,10 +284,15 @@ void Engine::process_one(const PacketView &packet) {
   if (packet.data == nullptr)
     return;
 
+  const uint8_t *payload = nullptr;
+  std::size_t payload_len = 0;
+  if (!extract_udp_payload(packet, cfg_.udp_dst_port, payload, payload_len)) {
+    return;
+  }
+
   protocol::MarketDataMsg msg{};
-  if (!protocol::decode(reinterpret_cast<const uint8_t *>(packet.data),
-                        packet.len, msg)) {
-    LOG_WARN("Decode failed: len=", packet.len);
+  if (!protocol::decode(payload, payload_len, msg)) {
+    LOG_WARN("Decode failed: udp_payload_len=", payload_len);
     return;
   }
 
@@ -220,8 +305,7 @@ void Engine::process_one(const PacketView &packet) {
   if (msg.seq_num == expected_seq_num_) {
     ++expected_seq_num_;
   } else if (msg.seq_num > expected_seq_num_) {
-    LOG_WARN("Sequence gap: expected=", expected_seq_num_,
-             " got=", msg.seq_num,
+    LOG_WARN("Sequence gap: expected=", expected_seq_num_, " got=", msg.seq_num,
              " gap=", msg.seq_num - expected_seq_num_);
     expected_seq_num_ = msg.seq_num + 1;
   } else {
