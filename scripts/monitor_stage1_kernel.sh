@@ -4,16 +4,34 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 EVIDENCE_DIR="${ROOT_DIR}/evidence"
 
-PID="${1:-}"
-PORT="${2:-8888}"
-IFACE="${3:-}"
+RAW1="${1:-}"
+RAW2="${2:-}"
+RAW3="${3:-}"
 DURATION="${DURATION:-10}"
 PERF_FREQ="${PERF_FREQ:-199}"
 SUDO="${SUDO:-sudo}"
 
+PID=""
+PORT="8888"
+IFACE=""
+
+if [[ -z "${RAW1}" ]]; then
+  PID="$(pgrep -n engine_app || true)"
+elif [[ -d "/proc/${RAW1}" ]]; then
+  PID="${RAW1}"
+  PORT="${RAW2:-8888}"
+  IFACE="${RAW3:-}"
+else
+  PID="$(pgrep -n engine_app || true)"
+  PORT="${RAW1}"
+  IFACE="${RAW2:-}"
+fi
+
 if [[ -z "${PID}" ]]; then
-  echo "usage: $0 <pid> [udp_port] [iface]" >&2
+  echo "usage: $0 [pid] [udp_port] [iface]" >&2
   echo "example: sudo DURATION=15 $0 12345 8888 eth0" >&2
+  echo "or: sudo DURATION=15 $0 8888 ens6    # auto-detect latest engine_app pid" >&2
+  echo "or: sudo DURATION=15 $0              # auto-detect pid, use defaults" >&2
   exit 1
 fi
 
