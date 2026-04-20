@@ -296,6 +296,18 @@ void Engine::process_one(const PacketView &packet) {
     return;
   }
 
+  if (cfg_.log_each_packet) {
+    LOG_INFO("Parsed packet: frame_len=", packet.len,
+             " udp_payload_len=", payload_len,
+             " seq=", msg.seq_num,
+             " symbol=", msg.symbol_id,
+             " ts=", msg.exchange_ts,
+             " bid=", msg.bid_price,
+             " ask=", msg.ask_price,
+             " bid_size=", msg.bid_size,
+             " ask_size=", msg.ask_size);
+  }
+
   if (!seq_initialized_) {
     expected_seq_num_ = msg.seq_num + 1;
     seq_initialized_ = true;

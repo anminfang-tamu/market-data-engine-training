@@ -44,6 +44,7 @@ struct EngineConfig {
   int hot_numa_node{-1};
   int hot_cpu{-1};
   uint16_t udp_dst_port{8888};
+  bool log_each_packet{false};
 };
 
 class Engine {

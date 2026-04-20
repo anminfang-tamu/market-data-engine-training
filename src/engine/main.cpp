@@ -1,9 +1,12 @@
+#include <algorithm>
 #include <charconv>
+#include <cctype>
 #include <csignal>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
 #include <pthread.h>
+#include <string>
 #include <system_error>
 #include <thread>
 
@@ -23,6 +26,28 @@ uint16_t env_u16(const char *name, uint16_t fallback) {
     }
     LOG_ERROR("Invalid value for ", name, ": ", value, "; using default ",
               fallback);
+  }
+  return fallback;
+}
+
+bool env_bool(const char *name, bool fallback) {
+  if (const char *value = std::getenv(name);
+      value != nullptr && value[0] != '\0') {
+    std::string parsed(value);
+    std::transform(parsed.begin(), parsed.end(), parsed.begin(),
+                   [](unsigned char ch) { return static_cast<char>(std::tolower(ch)); });
+
+    if (parsed == "1" || parsed == "true" || parsed == "yes" ||
+        parsed == "on") {
+      return true;
+    }
+    if (parsed == "0" || parsed == "false" || parsed == "no" ||
+        parsed == "off") {
+      return false;
+    }
+
+    LOG_ERROR("Invalid value for ", name, ": ", value, "; using default ",
+              fallback ? "true" : "false");
   }
   return fallback;
 }
@@ -51,6 +76,8 @@ int main(int argc, char **argv) {
 
   engine::v3::EngineConfig engine_cfg{};
   engine_cfg.udp_dst_port = env_u16("MD_ENGINE_UDP_PORT", 8888);
+  engine_cfg.log_each_packet =
+      env_bool("MD_ENGINE_LOG_EACH_PACKET", false);
 
   engine::v3::Engine engine(engine_cfg);
   engine::v3::DpdkRxSource::Config cfg{};
@@ -83,7 +110,9 @@ int main(int argc, char **argv) {
   }
 
   LOG_INFO("Engine DPDK receiver is running on port ", cfg.port_id, " queue ",
-           cfg.queue_id, " udp_dst_port ", engine_cfg.udp_dst_port);
+           cfg.queue_id, " udp_dst_port ", engine_cfg.udp_dst_port,
+           " log_each_packet ",
+           engine_cfg.log_each_packet ? "true" : "false");
 
   // Wait until a termination signal arrives.
   int sig = 0;
