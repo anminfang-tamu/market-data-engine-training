@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(MD_BUILD_GENERATOR_ONLY
+    "Build only generator-related targets and skip engine dependencies such as DPDK and NUMA."
+    OFF)
+
 add_subdirectory(src)
 
 if (BUILD_TESTING)
